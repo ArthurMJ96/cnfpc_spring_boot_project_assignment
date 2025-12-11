@@ -17,7 +17,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Address cannot be empty")
     @Size(min = 1, max = 512, message = "Address must be between 1 and 512 characters")
@@ -43,11 +43,12 @@ public class Address {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    public Integer getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -98,5 +99,4 @@ public class Address {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-
 }

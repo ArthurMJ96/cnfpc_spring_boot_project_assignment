@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Min;
 public class Inventory {
 
     @Id
-    private Integer id;
+    private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
@@ -24,11 +24,11 @@ public class Inventory {
     @Min(value = 0)
     private Integer amount;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
