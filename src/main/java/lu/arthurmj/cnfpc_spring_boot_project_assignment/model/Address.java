@@ -19,23 +19,31 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @NotBlank(message = "Address cannot be empty")
+    @NotBlank(message = "Firstname is required")
+    @Size(min = 1, max = 128, message = "Firstname must be between 1 and 128 characters")
+    private String firstName;
+
+    @NotBlank(message = "Lastname is required")
+    @Size(min = 1, max = 256, message = "Lastname must be between 1 and 256 characters")
+    private String lastName;
+    
+    @NotBlank(message = "Address is required")
     @Size(min = 1, max = 512, message = "Address must be between 1 and 512 characters")
     private String address;
 
-    @NotBlank(message = "City cannot be empty")
+    @NotBlank(message = "City is required")
     @Size(min = 1, max = 256, message = "City must be between 1 and 256 characters")
     private String city;
 
-    @NotBlank(message = "Region cannot be empty")
+    @NotBlank(message = "Region is required")
     @Size(min = 1, max = 256, message = "Region must be between 1 and 256 characters")
     private String region;
 
-    @NotBlank(message = "Postal Code cannot be empty")
+    @NotBlank(message = "Postal Code is required")
     @Size(min = 1, max = 64, message = "Postal Code must be between 1 and 64 characters")
     private String postalCode;
 
-    @NotBlank(message = "Country cannot be empty")
+    @NotBlank(message = "Country is required")
     @Size(min = 1, max = 128, message = "Country must be between 1 and 128 characters")
     private String country;
 

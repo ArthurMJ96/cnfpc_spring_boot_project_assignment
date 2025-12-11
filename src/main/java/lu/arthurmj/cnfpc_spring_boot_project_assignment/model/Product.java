@@ -1,6 +1,9 @@
 package lu.arthurmj.cnfpc_spring_boot_project_assignment.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -11,12 +14,20 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Represents a product entity in the ecommerce database.
+ */
 @Entity
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -37,8 +48,12 @@ public class Product {
 
     @ElementCollection
     @CollectionTable(name = "product_images")
-    @Column(name = "image_url")
-    private List<String> images;
+    @Column(name = "image_url", nullable = true)
+    private List<String> images = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "product_categories", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Inventory inventory;
@@ -81,6 +96,14 @@ public class Product {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 
     public Inventory getInventory() {

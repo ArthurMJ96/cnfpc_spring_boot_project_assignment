@@ -9,6 +9,9 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 
+/**
+ * Represents a inventory entity in the ecommerce database.
+ */
 @Entity
 @Table(name = "inventory")
 public class Inventory {
@@ -18,7 +21,7 @@ public class Inventory {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Min(value = 0)
