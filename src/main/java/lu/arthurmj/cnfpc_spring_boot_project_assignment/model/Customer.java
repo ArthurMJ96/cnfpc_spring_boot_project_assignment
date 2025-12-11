@@ -1,51 +1,58 @@
 package lu.arthurmj.cnfpc_spring_boot_project_assignment.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import lu.arthurmj.cnfpc_spring_boot_project_assignment.enums.Role;
 
+/**
+ * Represents a customer entity in the ecommerce database.
+ */
 @Entity
 @Table(name = "customers")
-public class Customer {
+public class Customer implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank(message = "Firstname cannot be empty")
-    @Size(min = 1, max = 128, message = "Firstname must be between 1 and 128 characters")
-    private String firstName;
-
-    @NotBlank(message = "Lastname cannot be empty")
-    @Size(min = 1, max = 256, message = "Lastname must be between 1 and 256 characters")
-    private String lastName;
-
+    @NotBlank(message = "Username is required")
     @Email(message = "Email should be valid")
-    @NotBlank(message = "Email cannot be empty")
-    private String email;
+    @Column(name = "email")
+    private String username;
 
-    // Stores BCrypt password hash
-    @Column(nullable = false, length = 60) // BCrypt hashes are 60 chars long
-    private String passwordHash;
-
-    @Transient
-    @NotBlank(message = "Password cannot be empty")
+    @NotBlank(message = "Password is required")
     private String password;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "roles")
+    private Set<Role> roles = new HashSet<>();
+
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private List<Address> addresses;
+    private List<Address> addresses = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -55,36 +62,20 @@ public class Customer {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
-        return email;
+        return username;
     }
 
     public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+        this.username = email;
     }
 
     public String getPassword() {
@@ -95,12 +86,32 @@ public class Customer {
         this.password = password;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     public List<Address> getAddresses() {
         return addresses;
     }
 
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        if (this.roles != null) {
+            for (Role role : this.roles) {
+                authorities.add(new SimpleGrantedAuthority(role.name()));
+            }
+        }
+
+        return authorities;
     }
 
 }
