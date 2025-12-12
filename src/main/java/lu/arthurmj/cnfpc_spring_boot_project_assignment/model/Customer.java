@@ -1,26 +1,24 @@
 package lu.arthurmj.cnfpc_spring_boot_project_assignment.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -40,19 +38,19 @@ public class Customer implements UserDetails {
 
     @NotBlank(message = "Username is required")
     @Email(message = "Email should be valid")
-    @Column(name = "email")
-    private String username;
+    @Column(unique = true, nullable = false)
+    private String email;
 
     @NotBlank(message = "Password is required")
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "roles")
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private List<Address> addresses = new ArrayList<>();
+    @MapKeyColumn(name = "id")
+    private Map<Long, Address> addresses = new HashMap<>();
 
     public String getId() {
         return id;
@@ -63,19 +61,19 @@ public class Customer implements UserDetails {
     }
 
     public String getUsername() {
-        return username;
+        return email;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.email = username;
     }
 
     public String getEmail() {
-        return username;
+        return email;
     }
 
     public void setEmail(String email) {
-        this.username = email;
+        this.email = email;
     }
 
     public String getPassword() {
@@ -94,12 +92,28 @@ public class Customer implements UserDetails {
         this.roles = roles;
     }
 
-    public List<Address> getAddresses() {
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+    }
+
+    public Map<Long, Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(Map<Long, Address> addresses) {
         this.addresses = addresses;
+    }
+
+    public void addAddress(Address address) {
+        this.addresses.put(address.getId(), address);
+    }
+
+    public void removeAddress(Address address) {
+        this.addresses.remove(address.getId());
     }
 
     @Override
