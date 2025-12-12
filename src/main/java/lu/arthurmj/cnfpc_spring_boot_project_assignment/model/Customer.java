@@ -18,9 +18,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.MapKey;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lu.arthurmj.cnfpc_spring_boot_project_assignment.enums.Role;
@@ -29,7 +31,7 @@ import lu.arthurmj.cnfpc_spring_boot_project_assignment.enums.Role;
  * Represents a customer entity in the ecommerce database.
  */
 @Entity
-@Table(name = "customers")
+@Table(name = "users")
 public class Customer implements UserDetails {
 
     @Id
@@ -44,12 +46,17 @@ public class Customer implements UserDetails {
     @NotBlank(message = "Password is required")
     private String password;
 
+    // Field to hold the confirmation password during regristration, ignored by JPA
+    @Transient
+    private String confirmPassword;
+
+    // Jsonb field to hold multiple roles without the need of a ManyToMany table.
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    @MapKeyColumn(name = "id")
+    @MapKey(name = "id")
     private Map<Long, Address> addresses = new HashMap<>();
 
     public String getId() {
@@ -60,6 +67,9 @@ public class Customer implements UserDetails {
         this.id = id;
     }
 
+    // Username getter & setters are enforced by UserDetails.
+    // But I configured sb-security to use email instead.
+    @Override
     public String getUsername() {
         return email;
     }
@@ -76,12 +86,21 @@ public class Customer implements UserDetails {
         this.email = email;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public Set<Role> getRoles() {
