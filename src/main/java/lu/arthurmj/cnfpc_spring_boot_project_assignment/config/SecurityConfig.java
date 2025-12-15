@@ -36,7 +36,12 @@ public class SecurityConfig {
     http
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-            .requestMatchers("/", "/register").permitAll()
+            .requestMatchers("/", "/products/**", "/product/**", "/categories/**", "/register").permitAll()
+            .requestMatchers("/products/new", "/products/edit/**", "/products/delete/**")
+            .hasAnyAuthority(Role.EMPLOYEE.name())
+            .requestMatchers("/categories/new", "/categories/edit/**", "/categories/delete/**")
+            .hasAuthority(Role.EMPLOYEE.name())
+            .requestMatchers("/cart/**", "/orders/**", "/profile").hasAuthority(Role.CUSTOMER.name())
             .anyRequest().authenticated())
         .formLogin(form -> form
             .loginPage("/login")
@@ -48,7 +53,7 @@ public class SecurityConfig {
             .logoutSuccessUrl("/?logout=true")
             .logoutUrl("/logout")
             .invalidateHttpSession(true)
-            .clearAuthentication(true))
+            .clearAuthentication(true).permitAll())
         .exceptionHandling(eh -> eh
             .accessDeniedPage("/403"));
     return http.build();
