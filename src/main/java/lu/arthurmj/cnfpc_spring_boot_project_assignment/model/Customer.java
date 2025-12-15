@@ -19,7 +19,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MapKey;
-import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -58,6 +57,15 @@ public class Customer implements UserDetails {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     @MapKey(name = "id")
     private Map<Long, Address> addresses = new HashMap<>();
+
+    public Customer(String email, String password, Set<Role> roles) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public Customer() {
+    }
 
     public String getId() {
         return id;

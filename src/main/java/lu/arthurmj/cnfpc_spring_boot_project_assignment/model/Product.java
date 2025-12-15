@@ -21,6 +21,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -42,7 +43,8 @@ public class Product {
     @Size(min = 0, max = 200, message = "Description must be between 10 and 200 characters")
     private String description;
 
-    @NotBlank(message = "Integer cannot be empty")
+    /** The price in cents */
+    @NotNull(message = "Integer cannot be empty")
     @Min(value = 0, message = "Price cannot be less than zero")
     private Integer price;
 
@@ -104,6 +106,11 @@ public class Product {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
+        category.getProducts().add(this);
     }
 
     public Inventory getInventory() {
