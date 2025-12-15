@@ -1,0 +1,16 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Example Title',
+    headResources=~{::headResources},
+    content=~{::content}
+)}">
+
+
+    <th:block th:fragment="headResources">
+        <link rel="stylesheet" th:href="@{/css/WHATEVER.css}">
+    </th:block>
+
+    <main th:fragment="content">
+        <p>CONTENT</p>
+    </main>
+
+</th:block>

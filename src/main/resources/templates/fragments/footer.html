@@ -1,0 +1,12 @@
+<footer class="footer" th:fragment="footer">
+    <div class="footer-container">
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a th:href="'mailto:support@' + ${appTitle} + '.com'">Contact Us</a>
+        </div>
+        <p class="footer-copyright">
+            &copy; <span th:text="${#dates.year(#dates.createNow())}">2025</span> E-commerce.
+        </p>
+    </div>
+</footer>

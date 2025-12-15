@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{fragments/head :: head(title=${title}, headResources=${headResources})}">
+</head>
+
+<body>
+    <!-- Include the navbar fragment we created earlier -->
+    <div th:replace="~{fragments/navbar}"></div>
+
+    <!-- Main content -->
+    <main th:replace="${content}"></main>
+
+    <!-- Footer fragment -->
+    <div th:replace="~{fragments/footer}"></div>
+</body>
+
+</html>

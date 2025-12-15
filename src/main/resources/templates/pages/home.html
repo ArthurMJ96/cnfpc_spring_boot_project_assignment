@@ -1,0 +1,17 @@
+<th:block th:replace="~{layouts/base :: html(
+    headResources=~{::headResources},
+    content=~{::content}
+)}">
+
+    <main th:fragment="content">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Discover Your Next Favorite Item</h1>
+                <p class="hero-subtitle">High-quality products shipped directly to you. Shop our newest collection now.
+                </p>
+                <a th:href="@{/products}" class="hero-button">Shop All Products</a>
+            </div>
+        </div>
+    </main>
+
+</th:block>

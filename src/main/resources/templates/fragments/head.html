@@ -1,0 +1,10 @@
+<head th:fragment="head(title, headResources)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:if="${title}" th:text="${title} + ' - ' + ${appTitle}"></title>
+    <title th:unless="${title}" th:text="${appTitle}"></title>
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <th:block th:replace="${headResources} ?: ~{}"></th:block>
+</head>
