@@ -1,0 +1,44 @@
+<th:block th:replace="~{layouts/base :: html(
+    title=${product.name},
+    content=~{::content}
+)}">
+
+    <main th:fragment="content">
+        <div class="product-detail-layout">
+
+            <div class="product-detail-image-col">
+                <img th:unless="${#lists.isEmpty(product.images)}" class="product-detail-image"
+                    th:src="${product.images[0]}" th:alt="${product.name}" />
+            </div>
+
+            <div class="product-detail-info-col">
+                <h1 th:text="${product.name}">Title</h1>
+
+                <p style="color: var(--secondary-color); font-size: 1.1em;">
+                    <th:block th:each="cat, stat : ${product.categories}">
+                        <span th:unless="${stat.first}">|</span>
+                        <span th:text="${cat.name}"></span>
+                    </th:block>
+                </p>
+
+                <p class="product-detail-price" th:text="${#numbers.formatCurrency(product.price/100.0)}"></p>
+
+                <form class="detail-form">
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" value="1" min="1" class="form-input" style="width: 5rem;">
+                    </div>
+
+                    <button type="submit" class="detail-button">Add to Cart</button>
+                </form>
+
+                <div class="detail-section">
+                    <h2 class="detail-section-title">Description</h2>
+                    <p th:text="${product.description}" style="color: var(--text-secondary);"></p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+</th:block>
