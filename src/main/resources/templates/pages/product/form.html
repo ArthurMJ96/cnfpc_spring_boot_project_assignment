@@ -1,0 +1,76 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Add New Product',
+    headResources=~{::headResources},
+    content=~{::content}
+)}">
+    <th:block th:fragment="headResources">
+        <link rel="stylesheet" th:href="@{/css/admin.css}">
+    </th:block>
+
+    <main th:fragment="content" style="display: flex; justify-content: center;">
+        <div class="form-card" style="max-width: 40rem;">
+            <h2 class="form-header">Add New Product</h2>
+
+            <form th:action="@{/products/save}" th:object="${product}" method="post" th:fragment="productForm">
+
+                <div class="form-group">
+                    <label for="name">Product Name</label>
+                    <input type="text" id="name" th:field="*{name}" required class="form-input"
+                        th:errorclass="form-input-error" />
+                    <p th:if="${#fields.hasErrors('name')}" class="error-msg mt-1" th:errors="*{name}">
+                        Name Error
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" th:field="*{description}" required class="form-input" rows="3"
+                        th:errorclass="form-input-error"></textarea>
+                    <p th:if="${#fields.hasErrors('description')}" class="error-msg mt-1" th:errors="*{description}">
+                        Description Error
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price (in Cents, e.g., 4999 for $49.99)</label>
+                    <input type="number" id="price" th:field="*{price}" required min="0" class="form-input"
+                        th:errorclass="form-input-error" />
+                    <p th:if="${#fields.hasErrors('price')}" class="error-msg mt-1" th:errors="*{price}">
+                        Price Error
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="mainImage">Main Image URL</label>
+                    <p class="text-xs text-gray-500 mb-1">Only the first image URL is handled by this simple form.</p>
+                    <input type="url" id="mainImage" name="images[0]" class="form-input" />
+                </div>
+
+                <div class="form-group">
+                    <label>Categories</label>
+                    <div class="checkbox-group">
+                        <th:block th:each="category : ${categories}">
+                            <div class="checkbox-container">
+                                <input type="checkbox" th:id="${'cat-' + category.id}" name="categories"
+                                    th:value="${category.id}" class="checkbox" />
+                                <label th:for="${'cat-' + category.id}" th:text="${category.name}"
+                                    class="text-sm text-gray-700"></label>
+                            </div>
+                        </th:block>
+                    </div>
+                    <p th:if="${#lists.isEmpty(categories)}" class="text-sm text-gray-500 mt-1">
+                        No categories found.
+                    </p>
+                </div>
+
+                <button type="submit" class="form-button" style="margin-top: 2rem;">Create Product</button>
+
+                <p class="form-link-text">
+                    <a th:href="@{/products/list}" style="color: var(--primary); font-weight: 500;">
+                        Back to Product List
+                    </a>
+                </p>
+            </form>
+        </div>
+    </main>
+</th:block>
