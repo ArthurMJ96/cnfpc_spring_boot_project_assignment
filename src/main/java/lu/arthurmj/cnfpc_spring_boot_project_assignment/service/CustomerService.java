@@ -1,5 +1,7 @@
 package lu.arthurmj.cnfpc_spring_boot_project_assignment.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,9 +32,9 @@ public class CustomerService implements UserDetailsService {
         return customer;
     }
 
-    public void create(Customer customer) throws IllegalArgumentException {
+    public void create(Customer customer) throws CustomerEmailExistsException {
         if (customerRepository.findByEmail(customer.getEmail()) != null) {
-            throw new CustomerEmailExistsException("Customer with this email already exists");
+            throw new CustomerEmailExistsException("Account with this email already exists");
         }
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customer.addRole(Role.CUSTOMER);
@@ -45,5 +47,13 @@ public class CustomerService implements UserDetailsService {
 
     public Customer findById(String id) {
         return customerRepository.findById(id).orElse(null);
+    }
+
+    public List<Customer> findAll() {
+        return customerRepository.findAll();
+    }
+
+    public List<Customer> getTop10() {
+        return customerRepository.findTop10By();
     }
 }

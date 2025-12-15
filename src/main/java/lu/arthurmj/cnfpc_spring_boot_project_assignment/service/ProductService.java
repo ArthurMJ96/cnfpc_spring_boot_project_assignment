@@ -30,4 +30,12 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
+    public List<Product> findTop8Products() {
+        return productRepository.findTop8By();
+    }
+
+    public List<Product> findByCategoryName(String categoryName) {
+        return productRepository.findByCategories_Name(categoryName);
+    }
+
 }
