@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +19,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import lu.arthurmj.cnfpc_spring_boot_project_assignment.enums.OrderStatus;
 
 /**
  * Represents a order entity in the ecommerce database.
@@ -47,6 +51,14 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status", nullable = false)
+    private OrderStatus orderStatus;
+
+    public Order() {
+        this.orderStatus = OrderStatus.PENDING;
+    }
 
     public String getId() {
         return id;
@@ -94,6 +106,39 @@ public class Order {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    @Transient
+    public int getTotalItems() {
+        return orderItems == null ? 0 : orderItems.stream().mapToInt(OrderItem::getQuantity).sum();
+    }
+
+    /** Total in cents, derived from stored order item prices. */
+    @Transient
+    public int getTotalAmount() {
+        if (orderItems == null) {
+            return 0;
+        }
+
+        long total = 0;
+        for (OrderItem item : orderItems) {
+            if (item == null) {
+                continue;
+            }
+            int qty = Math.max(0, item.getQuantity());
+            int cents = Math.max(0, item.getPrice());
+            total += (long) cents * (long) qty;
+        }
+
+        return total > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) total;
     }
 
 }

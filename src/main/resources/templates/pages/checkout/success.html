@@ -1,0 +1,17 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Order placed! - ' + ${orderId},
+    content=~{::content}
+)}">
+
+    <main th:fragment="content" style="display: flex; justify-content: center; margin: 0 auto;">
+        <div>
+            <h1>Thanks! Your order is placed</h1>
+            <p style="color: var(--text-secondary); margin: 2rem 0;">
+                Your order ID is <strong th:text="${orderId}"></strong>.
+            </p>
+
+            <a class="cart-secondary-button" th:href="@{/orders}">Go to orders</a>
+        </div>
+    </main>
+
+</th:block>

@@ -30,6 +30,10 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    @Column(nullable = false)
+    /** Price stored in cents. */
+    private int price;
+
     @Min(value = 0, message = "Quantity cannot be less than 1")
     @Column(nullable = false)
     private int quantity;
@@ -64,6 +68,14 @@ public class OrderItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
 }

@@ -1,5 +1,9 @@
 <th:block th:replace="~{layouts/base :: html(
-    title='Your Cart',
+    title=${
+        totalItems > 0 
+            ? 'Your Cart - ' + totalItems + ' Item' + (totalItems > 1 ? 's' : '') 
+            : 'Your Cart'
+        },
     content=~{::content}
 )}">
 
@@ -26,39 +30,48 @@
                             <th style="width: 5rem;"></th>
                         </tr>
                     </thead>
-                    <tbody> 
+                    <tbody>
                         <tr th:each="item : ${items}">
                             <td>
-                                <div class="cart-product">
-                                    <div class="cart-product-thumb" th:if="${item.imageUrl}">
+                                <div class="list-product">
+                                    <div class="list-product-thumb" th:if="${item.imageUrl}">
                                         <img th:src="${item.imageUrl}" th:alt="${item.productName}" loading="lazy" />
                                     </div>
                                     <div>
-                                        <a class="cart-product-name" th:href="@{'/product/' + ${item.productId}}"
+                                        <a class="list-product-name" th:href="@{'/product/' + ${item.productId}}"
                                             th:text="${item.productName}"></a>
-                                        <div class="cart-product-price"
+                                        <div class="list-product-price"
                                             th:text="${#numbers.formatCurrency(item.price/100.0)}"></div>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <form class="cart-quantity-form" th:action="@{/cart/update}" method="post">
+                                <form class="cart-sub-form" th:action="@{/cart/update}" method="post">
                                     <input type="hidden" name="productId" th:value="${item.productId}" />
                                     <input class="cart-quantity-input" type="number" name="quantity" min="1" max="999"
                                         th:value="${item.quantity}" />
                                     <button type="submit" class="cart-inline-button">Update</button>
                                 </form>
                             </td>
-                            <td class="cart-line-total"
-                                th:text="${#numbers.formatCurrency(item.lineTotal/100.0)}"></td>
+                            <td class="cart-line-total" th:text="${#numbers.formatCurrency(item.lineTotal/100.0)}"></td>
                             <td style="text-align: right;">
-                                <form th:action="@{/cart/remove}" method="post">
+                                <form class="cart-sub-form" th:action="@{/cart/remove}" method="post">
                                     <input type="hidden" name="productId" th:value="${item.productId}" />
                                     <button type="submit" class="cart-link-button">Remove</button>
                                 </form>
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <form th:action="@{/cart/clear}" method="post"
+                                    style="display: flex; justify-content: end;">
+                                    <button type="submit" class="cart-secondary-button" onclick="return confirm('Are you sure you want to clear you cart ?')">Clear cart</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
 
@@ -69,10 +82,7 @@
                 </div>
                 <p class="cart-summary-note">Taxes and shipping will be calculated at checkout.</p>
                 <div class="cart-summary-actions">
-                    <form th:action="@{/cart/clear}" method="post">
-                        <button type="submit" class="cart-secondary-button">Clear cart</button>
-                    </form>
-                    <button type="button" class="cart-primary-button" disabled>Checkout (coming soon)</button>
+                    <a class="cart-primary-button" th:href="@{/checkout}">Checkout</a>
                 </div>
             </aside>
         </div>

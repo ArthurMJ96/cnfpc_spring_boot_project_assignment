@@ -47,7 +47,8 @@ public class Product {
     /** The price in cents */
     @NotNull(message = "Integer cannot be empty")
     @Min(value = 0, message = "Price cannot be less than zero")
-    private Integer price;
+    @Column(nullable = true)
+    private Integer price = 0;
 
     @ElementCollection
     @CollectionTable(name = "product_images")

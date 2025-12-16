@@ -33,8 +33,20 @@
                         <td th:text="${product.id}">1</td>
 
                         <td style="text-align: left;">
-                            <a th:href="@{/product/} + ${product.id}" th:text="${product.name}"
-                                style="color: var(--primary); font-weight: 500;"></a>
+                            <a th:href="@{/product/} + ${product.id}" style="color: var(--primary); font-weight: 500;">
+                                <div class="list-product">
+                                    <div class="list-product-thumb" th:unless="${#lists.isEmpty(product.images)}">
+                                        <img th:src="${product.images[0]}" th:alt="${product.name}"
+                                            loading="lazy" />
+                                    </div>
+                                    <div>
+                                        <div class="list-product-name" th:href="@{'/product/' + ${product.id}}"
+                                            th:text="${product.name}"></div>
+                                        <div class="list-product-description"
+                                            th:text="${product.description}"></div>
+                                    </div>
+                                </div>
+                            </a>
                         </td>
 
                         <td style="text-align: right;">

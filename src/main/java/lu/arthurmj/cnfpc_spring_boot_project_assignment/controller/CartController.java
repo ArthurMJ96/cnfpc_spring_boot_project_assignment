@@ -1,5 +1,7 @@
 package lu.arthurmj.cnfpc_spring_boot_project_assignment.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +37,10 @@ public class CartController {
 
     @GetMapping
     public String getCart(Model model) {
-        model.addAttribute("items", cartService.getItems());
+        List<CartItem> items = cartService.getItems();
+        int totalItems = items.stream().mapToInt(CartItem::getQuantity).sum();
+        model.addAttribute("items", items);
+        model.addAttribute("totalItems", totalItems);
         model.addAttribute("totalAmount", cartService.getTotalAmount());
         model.addAttribute("isEmpty", cartService.isEmpty());
         return "pages/cart/cart";
