@@ -3,7 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:if="${title}" th:text="${title} + ' - ' + ${appTitle}"></title>
     <title th:unless="${title}" th:text="${appTitle}"></title>
-
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 
     <th:block th:replace="${headResources} ?: ~{}"></th:block>
