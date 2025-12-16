@@ -32,6 +32,10 @@ public class CustomerService implements UserDetailsService {
         return customer;
     }
 
+    public Customer findByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+
     public void create(Customer customer) throws CustomerEmailExistsException {
         if (customerRepository.findByEmail(customer.getEmail()) != null) {
             throw new CustomerEmailExistsException("Account with this email already exists");
