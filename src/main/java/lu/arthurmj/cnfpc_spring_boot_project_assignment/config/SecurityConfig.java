@@ -38,14 +38,14 @@ public class SecurityConfig {
             .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
             .requestMatchers("/", "/products/**", "/product/**", "/category/**", "/cart/**", "/register", "/error")
             .permitAll()
-            .requestMatchers("/orders/**", "/profile").hasAuthority(Role.CUSTOMER.name())
+            .requestMatchers("/checkout/**", "/orders/**", "/profile").hasAuthority(Role.CUSTOMER.name())
             .requestMatchers("/admin/**").hasAuthority(Role.EMPLOYEE.name())
             .anyRequest().authenticated())
         .formLogin(form -> form
             .loginPage("/login")
             .permitAll()
             .usernameParameter("email")
-            .defaultSuccessUrl("/", true)
+            .defaultSuccessUrl("/", false)
             .failureUrl("/login?error=true"))
         .logout(logout -> logout
             .logoutSuccessUrl("/?logout=true")

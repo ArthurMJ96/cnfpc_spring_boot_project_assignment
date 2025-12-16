@@ -4,6 +4,10 @@
     text-align: right;
 }
 
+.action-buttons-cell form {
+    margin: 0;
+}
+
 .edit-button,
 .delete-button {
     display: inline-block;

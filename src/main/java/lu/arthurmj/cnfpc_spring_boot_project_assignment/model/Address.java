@@ -43,7 +43,7 @@ public class Address {
     private String region;
 
     @NotBlank(message = "Postal Code is required")
-    @Size(min = 1, max = 64, message = "Postal Code must be between 1 and 64 characters")
+    @Size(min = 3, max = 32, message = "Postal Code must be between 3 and 32 characters")
     private String postalCode;
 
     @NotBlank(message = "Country is required")

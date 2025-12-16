@@ -73,6 +73,7 @@ public class CheckoutController {
 
         if (addressId == null) {
             redirectAttributes.addFlashAttribute("checkoutError", "Please select an address.");
+            redirectAttributes.addFlashAttribute("mode", "saved");
             return "redirect:/checkout";
         }
 
@@ -82,6 +83,7 @@ public class CheckoutController {
         if (address == null || address.getCustomer() == null
                 || !customer.getId().equals(address.getCustomer().getId())) {
             redirectAttributes.addFlashAttribute("checkoutError", "Invalid address selection.");
+            redirectAttributes.addFlashAttribute("mode", "saved");
             return "redirect:/checkout";
         }
 
@@ -97,6 +99,7 @@ public class CheckoutController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
+        redirectAttributes.addFlashAttribute("mode", "new");
         if (cartService.isEmpty()) {
             redirectAttributes.addFlashAttribute("cartError", "Your cart is empty.");
             return "redirect:/cart";
@@ -108,6 +111,7 @@ public class CheckoutController {
             model.addAttribute("items", cartService.getItems());
             model.addAttribute("totalAmount", cartService.getTotalAmount());
             model.addAttribute("savedAddresses", addressService.findForCustomerId(customer.getId()));
+            model.addAttribute("mode", "new");
             return "pages/checkout/checkout";
         }
 
