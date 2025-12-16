@@ -6,7 +6,7 @@
             <a th:href="'mailto:support@' + ${appTitle} + '.com'">Contact Us</a>
         </div>
         <p class="footer-copyright">
-            &copy; <span th:text="${#dates.year(#dates.createNow())}">2025</span> E-commerce.
+            &copy; <span th:text="${#dates.year(#dates.createNow())}">2025</span> <span th:text="${appTitle}"></span>.
         </p>
     </div>
 </footer>

@@ -6,38 +6,45 @@
 
         <ul class="navbar-links">
 
-            <li sec:authorize="!hasAuthority('EMPLOYEE')"><a th:href="@{/products}">Products</a></li>
+            <li sec:authorize="!hasAuthority('EMPLOYEE')">
+                <a th:href="@{/products}" th:class="${uc.apply('/products')}">Products</a>
+            </li>
             <li class="dropdown" sec:authorize="hasAuthority('EMPLOYEE')">
-                <a th:href="@{/products}">Products &#9662;</a>
+                <a th:href="@{/products}" th:class="${uc.apply('/products')}">Products &#9662;</a>
                 <div class="dropdown-content">
-                    <a th:href="@{/products/list}">Edit Products</a>
-                    <a th:href="@{/products/new}">Add Product</a>
+                    <a th:href="@{/admin/products/list}" th:class="${uc.apply('/products/list')}">Manage Products</a>
+                    <a th:href="@{/admin/products/new}" th:class="${uc.apply('/products/new')}">Add Product</a>
                 </div>
             </li>
 
-            <li sec:authorize="!hasAuthority('EMPLOYEE')"><a th:href="@{/categories}">Categories</a></li>
+            <li sec:authorize="!hasAuthority('EMPLOYEE')">
+                <a th:href="@{/category}" th:class="${uc.apply('/category')}">Categories</a>
+            </li>
             <li class="dropdown" sec:authorize="hasAuthority('EMPLOYEE')">
-                <a th:href="@{/products}">Categories &#9662;</a>
+                <a th:href="@{/category}" th:class="${uc.apply('/category')}">Categories &#9662;</a>
                 <div class="dropdown-content">
-                    <a th:href="@{/categories/list}">Edit Categories</a>
-                    <a th:href="@{/categories/new}">Add Category</a>
+                    <a th:href="@{/admin/category/list}" th:class="${uc.apply('/category/list')}">Manage Categories</a>
+                    <a th:href="@{/admin/category/new}" th:class="${uc.apply('/category/new')}">Add Category</a>
                 </div>
             </li>
 
             <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
 
             <li class="dropdown" sec:authorize="isAuthenticated()">
-                <a href="#"><span sec:authentication="name">User Name</span> &#9662;</a>
+                <a href="#" th:class="${uc.apply('/profile')}" th:classappend="${uc.apply('/orders')}">
+                    <span sec:authentication="name">User Name</span> &#9662;
+                </a>
                 <div class="dropdown-content">
-                    <a th:href="@{/profile}">Profile</a>
-                    <a th:href="@{/orders}">Orders</a>
+                    <a th:href="@{/profile}" th:class="${uc.apply('/profile')}">Profile</a>
+                    <a th:href="@{/orders}" th:class="${uc.apply('/orders')}">Orders</a>
                     <form class="logoutForm" th:action="@{/logout}" method="post">
-                        <button type="submit" class="logout-link-button">Logout</button>
+                        <button type="submit" onclick="return confirm('Are you sure you want to logout ?')"
+                            class="logout-link-button">Logout</button>
                     </form>
                 </div>
             </li>
 
-            <li><a th:href="@{/cart}">Cart</a></li>
+            <li><a th:href="@{/cart}" th:class="${uc.apply('/cart')}">Cart</a></li>
         </ul>
     </div>
 </nav>

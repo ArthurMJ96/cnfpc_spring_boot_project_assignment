@@ -1,5 +1,5 @@
 <th:block th:replace="~{layouts/base :: html(
-    title='Add New Product',
+    title=product.id ? 'Edit Product' : 'Add New Product',
     headResources=~{::headResources},
     content=~{::content}
 )}">
@@ -9,10 +9,11 @@
 
     <main th:fragment="content" style="display: flex; justify-content: center;">
         <div class="form-card" style="max-width: 40rem;">
-            <h2 class="form-header">Add New Product</h2>
+            <h2 class="form-header" th:if="${product.id}">Edit Product</h2>
+            <h2 class="form-header" th:unless="${product.id}">Add New Product</h2>
 
-            <form th:action="@{/products/save}" th:object="${product}" method="post" th:fragment="productForm">
-
+            <form th:action="@{/admin/products/save}" th:object="${product}" method="post" th:fragment="productForm">
+                <input type="hidden" th:field="*{id}">
                 <div class="form-group">
                     <label for="name">Product Name</label>
                     <input type="text" id="name" th:field="*{name}" required class="form-input"
@@ -43,7 +44,7 @@
                 <div class="form-group">
                     <label for="mainImage">Main Image URL</label>
                     <p class="text-xs text-gray-500 mb-1">Only the first image URL is handled by this simple form.</p>
-                    <input type="url" id="mainImage" name="images[0]" class="form-input" />
+                    <input type="url" th:field="*{images[0]}" class="form-input" />
                 </div>
 
                 <div class="form-group">
@@ -52,7 +53,8 @@
                         <th:block th:each="category : ${categories}">
                             <div class="checkbox-container">
                                 <input type="checkbox" th:id="${'cat-' + category.id}" name="categories"
-                                    th:value="${category.id}" class="checkbox" />
+                                    th:value="${category.id}" class="checkbox"
+                                    th:checked="${#sets.contains(product.categories, category)}" />
                                 <label th:for="${'cat-' + category.id}" th:text="${category.name}"
                                     class="text-sm text-gray-700"></label>
                             </div>
@@ -63,10 +65,15 @@
                     </p>
                 </div>
 
-                <button type="submit" class="form-button" style="margin-top: 2rem;">Create Product</button>
+                <button th:if="${product.id}" type="submit" class="form-button" style="margin-top: 2rem;">
+                    Update Product
+                </button>
+                <button th:unless="${product.id}" type="submit" class="form-button" style="margin-top: 2rem;">
+                    Create Product
+                </button>
 
                 <p class="form-link-text">
-                    <a th:href="@{/products/list}" style="color: var(--primary); font-weight: 500;">
+                    <a th:href="@{/admin/products/list}" class="back-link">
                         Back to Product List
                     </a>
                 </p>

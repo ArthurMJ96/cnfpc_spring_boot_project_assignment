@@ -13,7 +13,7 @@
 
         <div class="table-container">
             <div style="margin-bottom: 1.5rem; text-align: right;">
-                <a th:href="@{/products/new}" class="hero-button" style="padding: 0.5rem 1rem;">
+                <a th:href="@{/admin/products/new}" class="hero-button" style="padding: 0.5rem 1rem;">
                     Add New Product
                 </a>
             </div>
@@ -34,7 +34,7 @@
 
                         <td class="table-cell" style="text-align: left;">
                             <a th:href="@{/product/} + ${product.id}" th:text="${product.name}"
-                                style="color: var(--primary); font-weight: 500;">Product A</a>
+                                style="color: var(--primary); font-weight: 500;"></a>
                         </td>
 
                         <td class="table-cell" style="text-align: right;">
@@ -46,9 +46,9 @@
                         </td>
 
                         <td class="table-cell action-buttons-cell">
-                            <a th:href="@{/products/edit/} + ${product.id}" class="edit-button">Edit</a>
+                            <a th:href="@{/admin/products/edit/} + ${product.id}" class="edit-button">Edit</a>
 
-                            <form th:action="@{/products/delete/} + ${product.id}" method="post"
+                            <form th:action="@{/admin/products/delete/} + ${product.id}" method="post"
                                 style="display: inline-block;">
                                 <input type="hidden" name="_method" value="delete" />
 

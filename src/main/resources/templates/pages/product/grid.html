@@ -5,13 +5,13 @@
     <main th:fragment="content">
         <h1>All Products</h1>
 
-        <div class="product-grid" th:fragment="productsGrid">
+        <div class="product-grid" th:fragment="productsGrid" style="display: grid;">
             <div th:each="product : ${products}" class="product-card">
                 <a th:href="@{/product/} + ${product.id}">
 
                     <div class="product-card-image-wrapper">
                         <img th:unless="${#lists.isEmpty(product.images)}" class="product-card-image"
-                            th:src="${product.images[0]}" th:alt="${product.name}" />
+                            th:src="${product.images[0]}" th:alt="${product.name}" loading="lazy" />
                     </div>
 
                     <h3 class="product-card-title" th:text="${product.name}">Product Name</h3>
