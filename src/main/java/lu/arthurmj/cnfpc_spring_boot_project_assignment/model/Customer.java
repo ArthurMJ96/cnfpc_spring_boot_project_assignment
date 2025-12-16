@@ -1,9 +1,7 @@
 package lu.arthurmj.cnfpc_spring_boot_project_assignment.model;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.annotations.JdbcTypeCode;
@@ -18,7 +16,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.MapKey;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -54,9 +51,8 @@ public class Customer implements UserDetails {
     @Column(columnDefinition = "jsonb")
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    @MapKey(name = "id")
-    private Map<Long, Address> addresses = new HashMap<>();
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    private Set<Address> addresses = new HashSet<>();
 
     public Customer(String email, String password, Set<Role> roles) {
         this.email = email;
@@ -127,20 +123,20 @@ public class Customer implements UserDetails {
         this.roles.remove(role);
     }
 
-    public Map<Long, Address> getAddresses() {
+    public Set<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(Map<Long, Address> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
 
     public void addAddress(Address address) {
-        this.addresses.put(address.getId(), address);
+        this.addresses.add(address);
     }
 
     public void removeAddress(Address address) {
-        this.addresses.remove(address.getId());
+        this.addresses.remove(address);
     }
 
     @Override

@@ -36,12 +36,9 @@ public class SecurityConfig {
     http
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-            .requestMatchers("/", "/products/**", "/product/**", "/categories/**", "/register").permitAll()
-            .requestMatchers("/products/new", "/products/edit/**", "/products/delete/**")
-            .hasAnyAuthority(Role.EMPLOYEE.name())
-            .requestMatchers("/categories/new", "/categories/edit/**", "/categories/delete/**")
-            .hasAuthority(Role.EMPLOYEE.name())
+            .requestMatchers("/", "/products/**", "/product/**", "/category/**", "/register", "/error").permitAll()
             .requestMatchers("/cart/**", "/orders/**", "/profile").hasAuthority(Role.CUSTOMER.name())
+            .requestMatchers("/admin/**").hasAuthority(Role.EMPLOYEE.name())
             .anyRequest().authenticated())
         .formLogin(form -> form
             .loginPage("/login")

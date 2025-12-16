@@ -17,25 +17,6 @@ public class CustomerFactory {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /** Creates a standard Customer user. */
-    public Customer createCustomer(String email, String rawPassword) {
-        Customer customer = new Customer();
-        customer.setEmail(email);
-        customer.setPassword(passwordEncoder.encode(rawPassword));
-        customer.addRole(Role.CUSTOMER);
-        return customer;
-    }
-
-    /** Creates an administrative user with all roles. */
-    public Customer createAdminUser(String email, String rawPassword) {
-        Set<Role> roles = new HashSet<>(Arrays.asList(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER));
-        Customer admin = new Customer();
-        admin.setEmail(email);
-        admin.setPassword(passwordEncoder.encode(rawPassword));
-        admin.setRoles(roles);
-        return admin;
-    }
-
     /** Creates a custom user with specified roles. */
     public Customer createCustomUser(String email, String rawPassword, Set<Role> roles) {
         Customer user = new Customer();
@@ -44,4 +25,23 @@ public class CustomerFactory {
         user.setRoles(roles);
         return user;
     }
+
+    /** Creates a standard Customer user. */
+    public Customer createCustomer(String email, String rawPassword) {
+        Set<Role> roles = new HashSet<>(Arrays.asList(Role.CUSTOMER));
+        return createCustomUser(email, rawPassword, roles);
+    }
+
+    /** Creates an administrative user with all roles. */
+    public Customer createAdminUser(String email, String rawPassword) {
+        Set<Role> roles = new HashSet<>(Arrays.asList(Role.ADMIN, Role.EMPLOYEE, Role.CUSTOMER));
+        return createCustomUser(email, rawPassword, roles);
+    }
+
+    /** Creates an administrative user with all roles. */
+    public Customer createEmployeeUser(String email, String rawPassword) {
+        Set<Role> roles = new HashSet<>(Arrays.asList(Role.EMPLOYEE, Role.CUSTOMER));
+        return createCustomUser(email, rawPassword, roles);
+    }
+
 }

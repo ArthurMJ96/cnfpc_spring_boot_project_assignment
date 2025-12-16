@@ -21,16 +21,12 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
+    // #region Public Product Views
+
     @GetMapping("/products")
     public String getProducts(Model model) {
         model.addAttribute("products", productService.findAll());
         return "pages/product/grid";
-    }
-
-    @GetMapping("/products/list")
-    public String getProductsList(Model model) {
-        model.addAttribute("products", productService.findAll());
-        return "pages/product/list";
     }
 
     @GetMapping("/product/{id}")
@@ -42,15 +38,23 @@ public class ProductController {
         model.addAttribute("product", product);
         return "pages/product/detail";
     }
+    // #endregion
 
-    @GetMapping("/products/new")
+    // #region (Employees only) Product Management
+    @GetMapping("/admin/products/list")
+    public String getProductsList(Model model) {
+        model.addAttribute("products", productService.findAll());
+        return "pages/product/list";
+    }
+
+    @GetMapping("/admin/products/new")
     public String getNewProductForm(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("categories", categoryService.findAll());
         return "pages/product/form";
     }
 
-    @PostMapping("/products/save")
+    @PostMapping("/admin/products/save")
     public String saveProduct(@Valid Product product, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("product", product);
@@ -61,7 +65,7 @@ public class ProductController {
         return "redirect:/product/" + product.getId();
     }
 
-    @GetMapping("/products/edit/{id}")
+    @GetMapping("/admin/products/edit/{id}")
     public String getEditProductForm(@PathVariable Long id, Model model) {
         Product product = productService.findById(id);
         if (product == null) {
@@ -71,4 +75,12 @@ public class ProductController {
         model.addAttribute("categories", categoryService.findAll());
         return "pages/product/form";
     }
+
+    @PostMapping("/admin/products/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productService.deleteById(id);
+        return "redirect:/admin/products/list";
+    }
+
+    // #endregion
 }

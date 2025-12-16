@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,9 @@ public class DevDataInitializer {
 	@Autowired
 	private CategoryFactory categoryFactory;
 
+	@Value("${app.load-sample-data}")
+	private Boolean loadSampleData;
+
 	@Bean
 	public CommandLineRunner initData(
 			CustomerRepository customerRepository,
@@ -44,13 +48,24 @@ public class DevDataInitializer {
 			CategoryService categoryService,
 			ProductService productService) {
 		return args -> {
+			if (!loadSampleData) {
+				return;
+			}
+
 			List<Customer> customers = customerService.getTop10();
 			if (customers.size() == 0) {
+				System.out.println("Inserting sample data...");
 				// Create default admin user
 				Customer admin = customerFactory.createAdminUser(
 						"admin@admin.com",
 						"admin@admin.com");
 				customerService.save(admin);
+
+				// Create default employee user
+				Customer employee = customerFactory.createEmployeeUser(
+						"emp@emp.com",
+						"emp@emp.com");
+				customerService.save(employee);
 
 				// Create default customer user
 				Customer customer = customerFactory.createCustomer(
