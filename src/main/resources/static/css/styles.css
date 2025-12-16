@@ -273,13 +273,22 @@ h1 {
   accent-color: var(--primary);
 }
 
-.error-message {
+.error-message,
+.success-message {
   padding: 0.75rem;
   font-size: 0.875rem;
-  color: #b91c1c;
-  background-color: #fef2f2;
   border-radius: 0.375rem;
   margin-bottom: 1rem;
+}
+
+.error-message {
+  color: #b91c1c;
+  background-color: #fef2f2;
+}
+
+.success-message {
+  color: #15a066;
+  background-color: #00dc801f;
 }
 
 

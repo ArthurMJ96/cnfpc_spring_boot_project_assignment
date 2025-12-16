@@ -40,7 +40,7 @@ public class AuthController {
         }
 
         // Check if passwords match
-        if (!customer.getPassword().equals(customer.getConfirmPassword())) {
+        if (!customerService.validatePasswords(customer)) {
             result.rejectValue("confirmPassword", "password.mismatch", "Passwords do not match");
             model.addAttribute("customer", customer);
             return "pages/auth/register";

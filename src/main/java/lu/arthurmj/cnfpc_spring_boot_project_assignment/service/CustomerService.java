@@ -41,6 +41,15 @@ public class CustomerService implements UserDetailsService {
         customerRepository.save(customer);
     }
 
+    public boolean validatePasswords(Customer customer) {
+        return customer.getPassword().equals(customer.getConfirmPassword());
+    }
+
+    public void updatePassword(Customer customer, String newPassword) {
+        customer.setPassword(passwordEncoder.encode(newPassword));
+        customerRepository.save(customer);
+    }
+
     public void save(Customer customer) {
         customerRepository.save(customer);
     }
@@ -56,4 +65,5 @@ public class CustomerService implements UserDetailsService {
     public List<Customer> getTop10() {
         return customerRepository.findTop10By();
     }
+
 }

@@ -1,0 +1,58 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Your Profile',
+    content=~{::content}
+)}">
+
+    <main th:fragment="content" style="display: flex; justify-content: center;">
+        <div style="flex-grow: 1; max-width: 512px;">
+            <h1 style="text-align: center;">Account Settings</h1>
+
+            <section class="form-group">
+                <h4>Account Details</h4>
+                <label for="name">Email</label>
+                <input type="text" id="name" th:field="${customer.email}" class="form-input" disabled />
+            </section>
+
+            <hr style="margin: 2rem 0;">
+            <section>
+                <h4>Saved Addresses</h4>
+
+                <ul>
+                    <li th:each="address : ${customer.addresses}" th:text="${address.toString()}"></li>
+                    <li th:if="${#lists.isEmpty(customer.addresses)}">No addresses</li>
+                </ul>
+
+            </section>
+
+            <hr style="margin: 2rem 0;">
+            <section>
+
+                <form th:action="@{/profile/update/password}" method="post">
+                    <h4>Update Password</h4>
+                    <div th:if="${error}" class="error-message">
+                        <p th:each="msg : ${error}" th:text="${msg}"></p>
+                    </div>
+                    <div th:if="${success}" class="success-message">
+                        <p th:each="msg : ${success}" th:text="${msg}"></p>
+                    </div>
+                    <input type="hidden" th:field="${customer.id}">
+                    <input type="hidden" th:field="${customer.email}">
+                    <div class="form-group">
+                        <label for="password">New Password</label>
+                        <input type="password" th:field="${customer.password}" required class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmNewPassword">Confirm New Password</label>
+                        <input type="password" th:field="${customer.confirmPassword}" required class="form-input">
+                    </div>
+
+                    <button type="submit" onclick="return confirm('Are you sure you want to update your password ?')"
+                        class="form-button" style="margin-top: 2rem;">
+                        Update Password
+                    </button>
+                </form>
+            </section>
+        </div>
+    </main>
+</th:block>

@@ -26,7 +26,7 @@ public class Address {
     @NotBlank(message = "Lastname is required")
     @Size(min = 1, max = 256, message = "Lastname must be between 1 and 256 characters")
     private String lastName;
-    
+
     @NotBlank(message = "Address is required")
     @Size(min = 1, max = 512, message = "Address must be between 1 and 512 characters")
     private String address;
@@ -51,6 +51,10 @@ public class Address {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    public String toString() {
+        return firstName + " " + lastName + ", " + address + "\n" + city + ", " + region + ", " + postalCode + ", "
+                + country;
+    }
 
     public Long getId() {
         return id;
