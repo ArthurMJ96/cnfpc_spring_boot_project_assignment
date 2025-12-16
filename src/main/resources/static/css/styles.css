@@ -541,3 +541,46 @@ h1 {
   background-color: var(--primary-hover);
   color: white;
 }
+
+/* Profile Page Styles */
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  max-width: 512px;
+  gap: 2rem;
+}
+
+.profile section {
+  outline: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0 1rem 1rem 1rem;
+  overflow: hidden;
+}
+.profile section h3 {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: .5rem;
+  margin-bottom: 1rem;
+  margin-top: .5rem;
+}
+
+.address-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0 1rem;
+}
+
+.address-card {
+  background-color: white;
+  padding: .5rem;
+  margin-bottom: .5rem;
+  border-radius: 0.5rem;
+  outline: 1px solid var(--border-color);
+  white-space: pre-wrap;
+}

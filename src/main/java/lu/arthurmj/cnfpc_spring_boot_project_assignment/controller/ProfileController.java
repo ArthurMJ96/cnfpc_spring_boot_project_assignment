@@ -20,7 +20,7 @@ public class ProfileController {
 
     @GetMapping("/profile")
     public String showProfile(Authentication authentication, Model model) {
-        Customer customer = (Customer) authentication.getPrincipal();
+        Customer customer = customerService.findByEmail(authentication.getName());
         model.addAttribute("customer", customer);
         return "pages/profile/profile";
     }

@@ -3,32 +3,32 @@
     content=~{::content}
 )}">
 
-    <main th:fragment="content" style="display: flex; justify-content: center;">
-        <div style="flex-grow: 1; max-width: 512px;">
-            <h1 style="text-align: center;">Account Settings</h1>
+    <main th:fragment="content" class="profile-wrapper">
+        <div class="profile">
+            <h1 style="text-align: center;">Profile</h1>
 
-            <section class="form-group">
-                <h4>Account Details</h4>
-                <label for="name">Email</label>
-                <input type="text" id="name" th:field="${customer.email}" class="form-input" disabled />
+            <section>
+                <h3>Account Details</h3>
+                <div class="form-group">
+                    <label for="name">Email</label>
+                    <input type="text" id="name" th:field="${customer.email}" class="form-input" disabled />
+                </div>
             </section>
 
-            <hr style="margin: 2rem 0;">
             <section>
-                <h4>Saved Addresses</h4>
+                <h3>Saved Addresses</h3>
 
-                <ul>
-                    <li th:each="address : ${customer.addresses}" th:text="${address.toString()}"></li>
+                <ul class="address-list">
+                    <li th:each="address : ${customer.addresses}" th:utext="${address.toString()}" class="address-card">
+                    </li>
                     <li th:if="${#lists.isEmpty(customer.addresses)}">No addresses</li>
                 </ul>
-
             </section>
 
-            <hr style="margin: 2rem 0;">
             <section>
+                <h3>Update Password</h3>
 
                 <form th:action="@{/profile/update/password}" method="post">
-                    <h4>Update Password</h4>
                     <div th:if="${error}" class="error-message">
                         <p th:each="msg : ${error}" th:text="${msg}"></p>
                     </div>

@@ -52,8 +52,25 @@ public class Address {
     private Customer customer;
 
     public String toString() {
-        return firstName + " " + lastName + ", " + address + "\n" + city + ", " + region + ", " + postalCode + ", "
+        return firstName + " " + lastName + "\n"
+                + address + ", " + city + ", " + region + "\n" + postalCode + ", "
                 + country;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Long getId() {
