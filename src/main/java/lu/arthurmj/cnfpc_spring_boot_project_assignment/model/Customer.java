@@ -51,7 +51,7 @@ public class Customer implements UserDetails {
     @Column(columnDefinition = "jsonb")
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private Set<Address> addresses = new HashSet<>();
 
     public Customer(String email, String password, Set<Role> roles) {

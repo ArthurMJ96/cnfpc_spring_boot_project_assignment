@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lu.arthurmj.cnfpc_spring_boot_project_assignment.model.Product;
 import lu.arthurmj.cnfpc_spring_boot_project_assignment.service.CategoryService;
+import lu.arthurmj.cnfpc_spring_boot_project_assignment.service.InventoryService;
 import lu.arthurmj.cnfpc_spring_boot_project_assignment.service.ProductService;
 
 @Controller
@@ -20,6 +22,9 @@ public class ProductController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private InventoryService inventoryService;
 
     // #region Public Product Views
 
@@ -33,14 +38,14 @@ public class ProductController {
     public String getProduct(@PathVariable Long id, Model model) {
         Product product = productService.findById(id);
         if (product == null) {
-            return "errors/404";
+            throw new EntityNotFoundException("Product with ID '" + id + "' not found.");
         }
         model.addAttribute("product", product);
         return "pages/product/detail";
     }
     // #endregion
 
-    // #region (Employees only) Product Management
+    // #region Product Management Views (Employees only)
     @GetMapping("/admin/products/list")
     public String getProductsList(Model model) {
         model.addAttribute("products", productService.findAll());
@@ -49,7 +54,9 @@ public class ProductController {
 
     @GetMapping("/admin/products/new")
     public String getNewProductForm(Model model) {
-        model.addAttribute("product", new Product());
+        Product product = new Product();
+        inventoryService.ensureInventory(product);
+        model.addAttribute("product", product);
         model.addAttribute("categories", categoryService.findAll());
         return "pages/product/form";
     }
@@ -69,8 +76,9 @@ public class ProductController {
     public String getEditProductForm(@PathVariable Long id, Model model) {
         Product product = productService.findById(id);
         if (product == null) {
-            return "errors/404";
+            throw new EntityNotFoundException("Product with ID '" + id + "' not found.");
         }
+        inventoryService.ensureInventory(product);
         model.addAttribute("product", product);
         model.addAttribute("categories", categoryService.findAll());
         return "pages/product/form";

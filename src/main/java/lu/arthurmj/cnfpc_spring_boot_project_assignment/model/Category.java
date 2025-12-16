@@ -15,6 +15,9 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Represents a category entity in the database.
+ */
 @Entity
 @Table(name = "categories")
 public class Category {

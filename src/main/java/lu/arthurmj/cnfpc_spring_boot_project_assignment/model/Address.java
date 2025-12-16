@@ -11,6 +11,9 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Represents an address entity in the database.
+ */
 @Entity
 @Table(name = "addresses")
 public class Address {

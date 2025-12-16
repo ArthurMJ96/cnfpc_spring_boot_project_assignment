@@ -7,6 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Min;
 
 /**
@@ -25,6 +26,7 @@ public class Inventory {
     private Product product;
 
     @Min(value = 0)
+    @NotNull(message = "Inventory amount is required")
     private Integer amount;
 
     public Long getId() {

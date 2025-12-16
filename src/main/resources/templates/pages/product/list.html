@@ -11,7 +11,7 @@
     <main th:fragment="content">
         <h1>Admin Product List</h1>
 
-        <div class="table-container">
+        <div>
             <div style="margin-bottom: 1.5rem; text-align: right;">
                 <a th:href="@{/admin/products/new}" class="hero-button" style="padding: 0.5rem 1rem;">
                     Add New Product
@@ -20,32 +20,32 @@
 
             <table class="table">
                 <thead>
-                    <tr class="table-header">
-                        <th class="table-cell">ID</th>
-                        <th class="table-cell" style="text-align: left;">Name</th>
-                        <th class="table-cell" style="text-align: right;">Price</th>
-                        <th class="table-cell" style="text-align: center;">Inventory</th>
-                        <th class="table-cell" style="width: 150px; text-align: center;">Actions</th>
+                    <tr>
+                        <th>ID</th>
+                        <th style="text-align: left;">Name</th>
+                        <th style="text-align: right;">Price</th>
+                        <th style="text-align: center;">Inventory</th>
+                        <th style="width: 150px; text-align: center;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-row" th:each="product : ${products}">
-                        <td class="table-cell" th:text="${product.id}">1</td>
+                    <tr th:each="product : ${products}">
+                        <td th:text="${product.id}">1</td>
 
-                        <td class="table-cell" style="text-align: left;">
+                        <td style="text-align: left;">
                             <a th:href="@{/product/} + ${product.id}" th:text="${product.name}"
                                 style="color: var(--primary); font-weight: 500;"></a>
                         </td>
 
-                        <td class="table-cell" style="text-align: right;">
+                        <td style="text-align: right;">
                             $<span th:text="${#numbers.formatCurrency(product.price/100.0)}"></span>
                         </td>
 
-                        <td class="table-cell" style="text-align: center;">
-                            <span th:text="${product.inventory != null ? product.inventory.stock : 'N/A'}"></span>
+                        <td style="text-align: center;">
+                            <span th:text="${product.inventory != null ? product.inventory.amount : '0'}"></span>
                         </td>
 
-                        <td class="table-cell action-buttons-cell">
+                        <td class="action-buttons-cell">
                             <a th:href="@{/admin/products/edit/} + ${product.id}" class="edit-button">Edit</a>
 
                             <form th:action="@{/admin/products/delete/} + ${product.id}" method="post"
