@@ -44,7 +44,12 @@
                 </div>
             </li>
 
-            <li><a th:href="@{/cart}" th:class="${uc.apply('/cart')}">Cart</a></li>
+            <li>
+                <a th:href="@{/cart}" th:class="${uc.apply('/cart')}" th:classappend="${cartItemCount > 0 ? 'cart-link' : ''}">
+                    <span>Cart</span>
+                    <span th:if="${cartItemCount > 0}" class="cart-counter" th:text="${cartItemCount}">0</span>
+                </a>
+            </li>
         </ul>
     </div>
 </nav>

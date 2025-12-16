@@ -11,7 +11,7 @@
     <main th:fragment="content">
         <h1>Admin Category List</h1>
 
-        <div class="table-container">
+        <div>
             <div style="margin-bottom: 1.5rem; text-align: right;">
                 <a th:href="@{/admin/category/new}" class="hero-button" style="padding: 0.5rem 1rem;">
                     Add New Category
@@ -20,27 +20,27 @@
 
             <table class="table">
                 <thead>
-                    <tr class="table-header">
-                        <th class="table-cell">ID</th>
-                        <th class="table-cell" style="text-align: left;">Name</th>
-                        <th class="table-cell" style="text-align: center;">Products</th>
-                        <th class="table-cell" style="width: 150px; text-align: center;">Actions</th>
+                    <tr>
+                        <th style="width: 4rem;">ID</th>
+                        <th style="text-align: left;">Name</th>
+                        <th style="text-align: center;">Products</th>
+                        <th style="width: 150px; text-align: center;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-row" th:each="category : ${categories}">
-                        <td class="table-cell" th:text="${category.id}">1</td>
+                    <tr th:each="category : ${categories}">
+                        <td th:text="${category.id}">1</td>
 
-                        <td class="table-cell" style="text-align: left;">
+                        <td style="text-align: left;">
                             <a th:href="@{/category/} + ${category.name}" th:text="${category.name}"
                                 style="color: var(--primary); font-weight: 500;"></a>
                         </td>
 
-                        <td class="table-cell" style="text-align: center;">
+                        <td style="text-align: center;">
                             <span th:text="${category.products.size()}"></span>
                         </td>
 
-                        <td class="table-cell action-buttons-cell">
+                        <td>
                             <a th:href="@{/admin/category/edit/} + ${category.id}" class="edit-button">Edit</a>
 
                             <form th:action="@{/admin/category/delete/} + ${category.id}" method="post"

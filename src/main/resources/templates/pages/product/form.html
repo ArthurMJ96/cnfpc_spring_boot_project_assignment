@@ -42,6 +42,16 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="inventoryAmount">Inventory (units in stock)</label>
+                    <input type="number" id="inventoryAmount" th:field="*{inventory.amount}" required min="0"
+                        class="form-input" th:errorclass="form-input-error" />
+                    <p th:if="${#fields.hasErrors('inventory.amount')}" class="error-msg mt-1"
+                        th:errors="*{inventory.amount}">
+                        Inventory Error
+                    </p>
+                </div>
+
+                <div class="form-group">
                     <label for="mainImage">Main Image URL</label>
                     <p class="text-xs text-gray-500 mb-1">Only the first image URL is handled by this simple form.</p>
                     <input type="url" th:field="*{images[0]}" class="form-input" />

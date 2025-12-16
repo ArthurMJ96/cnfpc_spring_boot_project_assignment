@@ -15,11 +15,20 @@
                     </div>
 
                     <h3 class="product-card-title" th:text="${product.name}">Product Name</h3>
-                    <p class="product-card-price" th:text="${#numbers.formatCurrency(product.price/100.0)}"></p>
-                </a>
+                    <div class="product-card-action">
+                        <p class="product-card-price" th:text="${#numbers.formatCurrency(product.price/100.0)}"></p>
 
-                <a class="product-card-action-button" th:href="@{/cart/add(productId=${product.id})}">
-                    Add to Cart
+
+                        <form th:action="@{/cart/add}" method="post">
+                            <input type="hidden" name="productId" th:value="${product.id}" />
+                            <input type="hidden" name="quantity" value="1" />
+                            <button type="submit" class="product-card-action-button"
+                                th:text="${product.inventory == null || product.inventory.amount <= 0 ? 'Out of stock' : 'Add to Cart'}"
+                                th:disabled="${product.inventory == null || product.inventory.amount <= 0}">
+                                Add to Cart
+                            </button>
+                        </form>
+                    </div>
                 </a>
 
             </div>

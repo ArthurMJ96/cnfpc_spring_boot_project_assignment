@@ -40,7 +40,11 @@
                             class="form-input" style="width: 5rem;">
                     </div>
 
-                    <button type="submit" class="detail-button">Add to Cart</button>
+                    <button type="submit" class="detail-button"
+                        th:text="${product.inventory == null || product.inventory.amount <= 0 ? 'Out of stock' : 'Add to Cart'}"
+                        th:disabled="${product.inventory == null || product.inventory.amount <= 0}">
+                        Add to Cart
+                    </button>
                 </form>
 
                 <div class="detail-section">

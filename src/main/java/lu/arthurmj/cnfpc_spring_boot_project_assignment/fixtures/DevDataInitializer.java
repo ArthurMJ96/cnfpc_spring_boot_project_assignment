@@ -108,54 +108,57 @@ public class DevDataInitializer {
 						"Ipad Pro",
 						"Revolutionary iPad with M1 chip.",
 						59999, new HashSet<>(Arrays.asList(electronics, apple)),
-						phImages));
+						phImages, rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Harry Potter and the Philosopher's Stone",
 						"Harry Potter's first adventure in the wizarding world.",
 						2999, new HashSet<>(Arrays.asList(books)),
-						phImages));
+						phImages, rndNumber()));
 				productService.save(productFactory.createProduct(
 						"MacBook Pro",
 						"Powerful laptop designed for professionals.",
 						199999, new HashSet<>(Arrays.asList(electronics, apple)),
-						phImages));
+						phImages, rndNumber()));
 				productService.save(productFactory.createProduct(
 						"The Lord of the Rings: The Fellowship of the Ring",
 						"An epic fantasy novel by J.R.R. Tolkien.",
 						3999, new HashSet<>(Arrays.asList(books)),
-						phImages));
+						phImages, rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Running Shoes",
 						"High-quality running shoes for all terrains.",
 						7999, new HashSet<>(Arrays.asList(sports, fashion)),
-						phImages));
+						phImages, rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Blender",
 						"Powerful kitchen blender with multiple speed settings.",
 						4999, new HashSet<>(Arrays.asList(home, electronics)),
-						phImages));
+						phImages, rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Smartwatch",
 						"Feature-rich smartwatch with health tracking capabilities.",
 						14999, new HashSet<>(Arrays.asList(electronics, fashion)),
-						phImages));
+						phImages, rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Cookbook",
 						"Delicious recipes from around the world.",
 						2599, new HashSet<>(Arrays.asList(books, home)),
-						phImages));
+						phImages, rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Digital Camera",
 						"High-resolution digital camera for stunning photos.",
 						89999, new HashSet<>(Arrays.asList(electronics)),
-						phImages));
+						phImages, rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Yoga Mat",
 						"Non-slip yoga mat for all types of exercises.",
 						2999, new HashSet<>(Arrays.asList(sports, home)),
-						phImages));
+						phImages, rndNumber()));
 			}
 		};
 	}
 
+	private int rndNumber() {
+		return (int) (5 + Math.random() * 45);
+	}
 }
