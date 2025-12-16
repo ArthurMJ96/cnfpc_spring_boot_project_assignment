@@ -8,8 +8,14 @@
     <!-- Navbar fragment -->
     <div th:replace="~{fragments/navbar}"></div>
 
-    <!-- Main content -->
-    <main th:replace="${content}"></main>
+    <main th:fragment="main-content-wrapper" class="two-column-layout">
+
+        <!-- Sidebar content -->
+        <aside th:replace="${sidebar}"></aside>
+
+        <!-- Main content -->
+        <section th:replace="${content}"></section>
+    </main>
 
     <!-- Footer fragment -->
     <div th:replace="~{fragments/footer}"></div>
