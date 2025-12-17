@@ -60,6 +60,7 @@ public class DevDataInitializer {
 			List<Customer> customers = customerService.getTop10();
 			if (customers.size() == 0) {
 				System.out.println("Inserting sample data...");
+				// #region Users
 				// Create default admin user
 				Customer admin = customerFactory.createAdminUser(
 						"admin@admin.com",
@@ -87,8 +88,9 @@ public class DevDataInitializer {
 						"cust@cust.com",
 						"cust@cust.com");
 				customerService.save(customer);
+				// #endregion
 
-				// Create categories
+				// #region Create categories
 				Category electronics = categoryFactory.createCategory("Electronics");
 				Category books = categoryFactory.createCategory("Books");
 				Category apple = categoryFactory.createCategory("Apple");
@@ -101,59 +103,60 @@ public class DevDataInitializer {
 				categoryService.save(fashion);
 				categoryService.save(sports);
 				categoryService.save(home);
+				// #endregion
 
-				// Create products
-				List<String> phImages = Arrays.asList("https://placehold.net/600x600.png");
+				// #region Create products
 				productService.save(productFactory.createProduct(
 						"Ipad Pro",
 						"Revolutionary iPad with M1 chip.",
 						59999, new HashSet<>(Arrays.asList(electronics, apple)),
-						phImages, rndNumber()));
+						Arrays.asList("/images/product/ipadpro.jpg"), rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Harry Potter and the Philosopher's Stone",
 						"Harry Potter's first adventure in the wizarding world.",
 						2999, new HashSet<>(Arrays.asList(books)),
-						phImages, rndNumber()));
+						Arrays.asList("/images/product/potter1.jpg"), rndNumber()));
 				productService.save(productFactory.createProduct(
 						"MacBook Pro",
 						"Powerful laptop designed for professionals.",
 						199999, new HashSet<>(Arrays.asList(electronics, apple)),
-						phImages, rndNumber()));
+						Arrays.asList("/images/product/mbpro.jpg"), rndNumber()));
 				productService.save(productFactory.createProduct(
 						"The Lord of the Rings: The Fellowship of the Ring",
 						"An epic fantasy novel by J.R.R. Tolkien.",
 						3999, new HashSet<>(Arrays.asList(books)),
-						phImages, rndNumber()));
+						Arrays.asList("/images/product/lotr1.jpg"), rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Running Shoes",
 						"High-quality running shoes for all terrains.",
 						7999, new HashSet<>(Arrays.asList(sports, fashion)),
-						phImages, rndNumber()));
+						Arrays.asList("/images/product/shoes.jpg"), rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Blender",
 						"Powerful kitchen blender with multiple speed settings.",
 						4999, new HashSet<>(Arrays.asList(home, electronics)),
-						phImages, rndNumber()));
+						Arrays.asList("/images/product/Blender.jpg"), rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Smartwatch",
 						"Feature-rich smartwatch with health tracking capabilities.",
 						14999, new HashSet<>(Arrays.asList(electronics, fashion)),
-						phImages, rndNumber()));
+						Arrays.asList("/images/product/watch.jpg"), rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Cookbook",
 						"Delicious recipes from around the world.",
 						2599, new HashSet<>(Arrays.asList(books, home)),
-						phImages, rndNumber()));
+						Arrays.asList("/images/product/cookbooklmao.jpg"), rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Digital Camera",
 						"High-resolution digital camera for stunning photos.",
 						89999, new HashSet<>(Arrays.asList(electronics)),
-						phImages, rndNumber()));
+						Arrays.asList("/images/product/camera.jpg"), rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Yoga Mat",
 						"Non-slip yoga mat for all types of exercises.",
 						2999, new HashSet<>(Arrays.asList(sports, home)),
-						phImages, rndNumber()));
+						Arrays.asList("https://placehold.net/600x600.png"), rndNumber()));
+				// #endregion
 			}
 		};
 	}
