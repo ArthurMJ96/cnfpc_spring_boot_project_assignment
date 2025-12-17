@@ -31,6 +31,10 @@ public class SecurityConfig {
     return provider;
   }
 
+  /**
+   * Configures the security filter chain.
+   * Defines access rules, login, and logout behavior.
+   */
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http

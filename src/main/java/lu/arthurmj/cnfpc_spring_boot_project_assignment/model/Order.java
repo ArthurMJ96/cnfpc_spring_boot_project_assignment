@@ -129,6 +129,7 @@ public class Order {
         }
 
         long total = 0;
+        // Calculate total based on stored prices in order items
         for (OrderItem item : orderItems) {
             if (item == null) {
                 continue;
@@ -138,6 +139,7 @@ public class Order {
             total += (long) cents * (long) qty;
         }
 
+        // Prevent overflow
         return total > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) total;
     }
 

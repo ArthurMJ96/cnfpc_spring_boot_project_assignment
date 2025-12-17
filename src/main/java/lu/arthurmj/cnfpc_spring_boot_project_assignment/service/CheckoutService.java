@@ -58,7 +58,7 @@ public class CheckoutService {
         Order order = new Order();
         order.setCustomer(customer);
         order.setShippingAddress(shippingAddress);
-        // Keep it simple: billing == shipping for now.
+        // Billing address is the same as shipping for now
         order.setBillingAddress(shippingAddress);
 
         List<OrderItem> orderItems = new ArrayList<>();

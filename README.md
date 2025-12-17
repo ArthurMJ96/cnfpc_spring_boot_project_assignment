@@ -112,71 +112,81 @@ Cart endpoints (see [src/main/java/lu/arthurmj/cnfpc_spring_boot_project_assignm
 
 ```mermaid
 flowchart TD
-  %% Entry points
   Start([Visitor]) --> Home[Home /]
 
-  %% Public browsing
-  Home --> Products[Products Grid /products]
-  Home --> Categories[Categories /category]
-  Products --> ProductDetail[Product Detail /product/<id>]
-  Categories --> CategoryPage[Category Detail /category/<categoryName>]
-  CategoryPage --> Products
+  %% Public (no login required)
+  subgraph Public["Public"]
+    Home --> Products[Products /products]
+    Products --> ProductDetail[Product Detail /product/<id>]
 
-  %% Cart (public, session-based)
-  Home --> Cart[Cart /cart]
-  Products -->|"Add to cart"| Cart
-  ProductDetail -->|"Add to cart"| Cart
-  Cart -->|"Update / Remove / Clear"| Cart
+    Home --> Categories[Categories /category]
+    Categories -->|"redirects to first category"| CategoryGrid[Category Page /category/<categoryName>]
+    CategoryGrid --> ProductDetail
 
-  %% Auth
-  Home --> Login[Login /login]
-  Home --> Register[Register /register]
-  Register --> Login
-  Login --> RoleGate{Role?}
-  RoleGate -->|"CUSTOMER"| CustomerHome[Customer Area]
-  RoleGate -->|"EMPLOYEE"| AdminHome[Admin Area]
+    Home --> Cart[Cart /cart]
+    Products -->|"POST /cart/add"| Cart
+    ProductDetail -->|"POST /cart/add"| Cart
+    Cart -->|"POST /cart/update"| Cart
+    Cart -->|"POST /cart/remove"| Cart
+    Cart -->|"POST /cart/clear"| Cart
 
-  %% Customer area
-  subgraph CustomerArea[Customer Area - requires CUSTOMER]
+    Home --> Login[Login /login]
+    Home --> Register[Register /register]
+    Register -->|"POST /register"| Login
+  end
+
+  %% Customer (requires CUSTOMER)
+  subgraph CustomerArea["Customer Area - CUSTOMER"]
     Checkout[Checkout /checkout]
-    Success[Checkout Success /checkout/success]
+    CheckoutSuccess[Success /checkout/success?orderId=...]
     Orders[Orders /orders]
     OrderDetail[Order Detail /orders/<orderId>]
     Profile[Profile /profile]
+    UpdatePassword[POST /profile/update/password]
   end
 
-  Cart -->|"Proceed to checkout"| Checkout
-  Checkout --> Success
-  Home --> Orders
+  Cart -->|"Checkout link"| Checkout
+  Checkout -->|"POST /checkout (mode=saved or mode=new)"| CheckoutSuccess
+  CheckoutSuccess --> Orders
   Orders --> OrderDetail
-  Home --> Profile
-  CustomerHome --> Checkout
-  CustomerHome --> Orders
-  CustomerHome --> Profile
+  Profile --> UpdatePassword --> Profile
 
-  %% Admin/Employee area
-  subgraph AdminArea[Admin Area - requires EMPLOYEE]
-    AdminProducts[Products List /admin/products/list]
+  %% Employee/Admin (requires EMPLOYEE)
+  subgraph AdminArea["Admin Area - EMPLOYEE"]
+    AdminOrders[All Orders /admin/orders/list]
+    AdminOrderDetail[Order Detail /admin/orders/<orderId>]
+    AdminOrderStatus[POST /admin/orders/<orderId>/status]
+
+    AdminProducts[Manage Products /admin/products/list]
     AdminProductNew[New Product /admin/products/new]
     AdminProductEdit[Edit Product /admin/products/edit/<id>]
-    AdminCategories[Categories List /admin/category/list]
+    AdminProductSave[POST /admin/products/save]
+    AdminProductDelete[POST /admin/products/delete/<id>]
+
+    AdminCategories[Manage Categories /admin/category/list]
     AdminCategoryNew[New Category /admin/category/new]
     AdminCategoryEdit[Edit Category /admin/category/edit/<id>]
-    AdminOrders[Orders List /admin/orders/list]
-    AdminOrderDetail[Order Detail /admin/orders/<orderId>]
+    AdminCategorySave[POST /admin/category/save]
+    AdminCategoryDelete[POST /admin/category/delete/<id>]
   end
 
-  Home --> AdminProducts
-  AdminProducts --> AdminProductNew
-  AdminProducts --> AdminProductEdit
-  Home --> AdminCategories
-  AdminCategories --> AdminCategoryNew
-  AdminCategories --> AdminCategoryEdit
-  Home --> AdminOrders
   AdminOrders --> AdminOrderDetail
-  AdminHome --> AdminProducts
-  AdminHome --> AdminCategories
-  AdminHome --> AdminOrders
+  AdminOrderDetail --> AdminOrderStatus --> AdminOrderDetail
+
+  AdminProducts --> AdminProductNew --> AdminProductSave --> ProductDetail
+  AdminProducts --> AdminProductEdit --> AdminProductSave --> ProductDetail
+  AdminProducts --> AdminProductDelete --> AdminProducts
+
+  AdminCategories --> AdminCategoryNew --> AdminCategorySave --> CategoryGrid
+  AdminCategories --> AdminCategoryEdit --> AdminCategorySave --> CategoryGrid
+  AdminCategories --> AdminCategoryDelete --> AdminCategories
+
+  %% Security behavior (high level)
+  SecurityNote["Security: protected pages redirect anonymous users to /login; authenticated users without the required authority are sent to /403 (configured in SecurityConfig)"]
+  Checkout -.-> SecurityNote
+  Orders -.-> SecurityNote
+  Profile -.-> SecurityNote
+  AdminOrders -.-> SecurityNote
 ```
 
 ## Database Model (JPA)

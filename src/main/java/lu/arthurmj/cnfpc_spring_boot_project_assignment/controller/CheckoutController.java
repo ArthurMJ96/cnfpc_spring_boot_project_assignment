@@ -80,6 +80,7 @@ public class CheckoutController {
         Customer customer = customerService.findByEmail(authentication.getName());
         Address address = addressService.findById(addressId);
 
+        // Validate address ownership
         if (address == null || address.getCustomer() == null
                 || !customer.getId().equals(address.getCustomer().getId())) {
             redirectAttributes.addFlashAttribute("checkoutError", "Invalid address selection.");

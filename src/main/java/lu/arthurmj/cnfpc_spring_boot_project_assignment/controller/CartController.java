@@ -53,6 +53,7 @@ public class CartController {
             RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
+            // Handle validation errors for quantity
             String message = result.getFieldError("quantity") != null
                     ? result.getFieldError("quantity").getDefaultMessage()
                     : "Invalid cart input.";
@@ -70,11 +71,13 @@ public class CartController {
         int currentInCart = cartService.getQuantityForProduct(product.getId());
         int desiredTotal = currentInCart + requested;
 
+        // Handle out of stock scenario
         if (available <= 0) {
             redirectAttributes.addFlashAttribute("cartError", "Sorry, \"" + product.getName() + "\" is out of stock.");
             return "redirect:/cart";
         }
 
+        // Adjust to maximum available stock
         if (desiredTotal > available) {
             int canAdd = Math.max(0, available - currentInCart);
             if (canAdd <= 0) {
@@ -100,6 +103,7 @@ public class CartController {
             RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
+            // Handle validation errors for quantity
             String message = result.getFieldError("quantity") != null
                     ? result.getFieldError("quantity").getDefaultMessage()
                     : "Invalid cart input.";
@@ -111,12 +115,14 @@ public class CartController {
         int requested = item.getQuantity();
         int available = inventoryService.getAvailable(productId);
 
+        // Remove item if out of stock
         if (available <= 0) {
             cartService.removeProduct(productId);
             redirectAttributes.addFlashAttribute("cartError", "Item removed: product is out of stock.");
             return "redirect:/cart";
         }
 
+        // Adjust to maximum available stock
         if (requested > available) {
             cartService.updateQuantity(productId, available);
             redirectAttributes.addFlashAttribute("cartError",
