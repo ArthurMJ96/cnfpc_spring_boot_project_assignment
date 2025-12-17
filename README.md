@@ -108,6 +108,77 @@ Cart endpoints (see [src/main/java/lu/arthurmj/cnfpc_spring_boot_project_assignm
   - List: `/admin/orders/list`
   - Detail + status update: `/admin/orders/{orderId}`, `POST /admin/orders/{orderId}/status`
 
+## Website Design Flowchart
+
+```mermaid
+flowchart TD
+  %% Entry points
+  Start([Visitor]) --> Home[Home /]
+
+  %% Public browsing
+  Home --> Products[Products Grid /products]
+  Home --> Categories[Categories /category]
+  Products --> ProductDetail[Product Detail /product/<id>]
+  Categories --> CategoryPage[Category Detail /category/<categoryName>]
+  CategoryPage --> Products
+
+  %% Cart (public, session-based)
+  Home --> Cart[Cart /cart]
+  Products -->|"Add to cart"| Cart
+  ProductDetail -->|"Add to cart"| Cart
+  Cart -->|"Update / Remove / Clear"| Cart
+
+  %% Auth
+  Home --> Login[Login /login]
+  Home --> Register[Register /register]
+  Register --> Login
+  Login --> RoleGate{Role?}
+  RoleGate -->|"CUSTOMER"| CustomerHome[Customer Area]
+  RoleGate -->|"EMPLOYEE"| AdminHome[Admin Area]
+
+  %% Customer area
+  subgraph CustomerArea[Customer Area - requires CUSTOMER]
+    Checkout[Checkout /checkout]
+    Success[Checkout Success /checkout/success]
+    Orders[Orders /orders]
+    OrderDetail[Order Detail /orders/<orderId>]
+    Profile[Profile /profile]
+  end
+
+  Cart -->|"Proceed to checkout"| Checkout
+  Checkout --> Success
+  Home --> Orders
+  Orders --> OrderDetail
+  Home --> Profile
+  CustomerHome --> Checkout
+  CustomerHome --> Orders
+  CustomerHome --> Profile
+
+  %% Admin/Employee area
+  subgraph AdminArea[Admin Area - requires EMPLOYEE]
+    AdminProducts[Products List /admin/products/list]
+    AdminProductNew[New Product /admin/products/new]
+    AdminProductEdit[Edit Product /admin/products/edit/<id>]
+    AdminCategories[Categories List /admin/category/list]
+    AdminCategoryNew[New Category /admin/category/new]
+    AdminCategoryEdit[Edit Category /admin/category/edit/<id>]
+    AdminOrders[Orders List /admin/orders/list]
+    AdminOrderDetail[Order Detail /admin/orders/<orderId>]
+  end
+
+  Home --> AdminProducts
+  AdminProducts --> AdminProductNew
+  AdminProducts --> AdminProductEdit
+  Home --> AdminCategories
+  AdminCategories --> AdminCategoryNew
+  AdminCategories --> AdminCategoryEdit
+  Home --> AdminOrders
+  AdminOrders --> AdminOrderDetail
+  AdminHome --> AdminProducts
+  AdminHome --> AdminCategories
+  AdminHome --> AdminOrders
+```
+
 ## Database Model (JPA)
 
 Examples of entity relationships implemented:
