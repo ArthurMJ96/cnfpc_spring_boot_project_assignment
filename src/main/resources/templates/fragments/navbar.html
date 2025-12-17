@@ -6,37 +6,40 @@
 
         <ul class="navbar-links">
 
+            <li sec:authorize="hasAuthority('EMPLOYEE')">
+                <a th:href="@{/admin/orders/list}" th:class="${usa.apply('/admin/orders')}">All Orders</a>
+            </li>
             <li sec:authorize="!hasAuthority('EMPLOYEE')">
-                <a th:href="@{/products}" th:class="${uc.apply('/products')}">Products</a>
+                <a th:href="@{/products}" th:class="${uca.apply('/products')}">Products</a>
             </li>
             <li class="dropdown" sec:authorize="hasAuthority('EMPLOYEE')">
-                <a th:href="@{/products}" th:class="${uc.apply('/products')}">Products &#9662;</a>
+                <a th:href="@{/products}" th:class="${uca.apply('/products')}">Products &#9662;</a>
                 <div class="dropdown-content">
-                    <a th:href="@{/admin/products/list}" th:class="${uc.apply('/products/list')}">Manage Products</a>
-                    <a th:href="@{/admin/products/new}" th:class="${uc.apply('/products/new')}">Add Product</a>
+                    <a th:href="@{/admin/products/list}" th:class="${uca.apply('/products/list')}">Manage Products</a>
+                    <a th:href="@{/admin/products/new}" th:class="${uca.apply('/products/new')}">Add Product</a>
                 </div>
             </li>
 
             <li sec:authorize="!hasAuthority('EMPLOYEE')">
-                <a th:href="@{/category}" th:class="${uc.apply('/category')}">Categories</a>
+                <a th:href="@{/category}" th:class="${uca.apply('/category')}">Categories</a>
             </li>
             <li class="dropdown" sec:authorize="hasAuthority('EMPLOYEE')">
-                <a th:href="@{/category}" th:class="${uc.apply('/category')}">Categories &#9662;</a>
+                <a th:href="@{/category}" th:class="${uca.apply('/category')}">Categories &#9662;</a>
                 <div class="dropdown-content">
-                    <a th:href="@{/admin/category/list}" th:class="${uc.apply('/category/list')}">Manage Categories</a>
-                    <a th:href="@{/admin/category/new}" th:class="${uc.apply('/category/new')}">Add Category</a>
+                    <a th:href="@{/admin/category/list}" th:class="${uca.apply('/category/list')}">Manage Categories</a>
+                    <a th:href="@{/admin/category/new}" th:class="${uca.apply('/category/new')}">Add Category</a>
                 </div>
             </li>
 
             <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
 
             <li class="dropdown" sec:authorize="isAuthenticated()">
-                <a href="#" th:class="${uc.apply('/profile')}" th:classappend="${uc.apply('/orders')}">
+                <a href="#" th:class="${uca.apply('/profile')}" th:classappend="${usa.apply('/orders')}">
                     <span sec:authentication="name">User Name</span> &#9662;
                 </a>
                 <div class="dropdown-content">
-                    <a th:href="@{/profile}" th:class="${uc.apply('/profile')}">Profile</a>
-                    <a th:href="@{/orders}" th:class="${uc.apply('/orders')}">Orders</a>
+                    <a th:href="@{/profile}" th:class="${uca.apply('/profile')}">Profile</a>
+                    <a th:href="@{/orders}" th:class="${usa.apply('/orders')}">Orders</a>
                     <form class="logoutForm" th:action="@{/logout}" method="post">
                         <button type="submit" onclick="return confirm('Are you sure you want to logout ?')"
                             class="logout-link-button">Logout</button>
@@ -45,7 +48,8 @@
             </li>
 
             <li>
-                <a th:href="@{/cart}" th:class="${uc.apply('/cart')}" th:classappend="${cartItemCount > 0 ? 'cart-link' : ''}">
+                <a th:href="@{/cart}" th:class="${uca.apply('/cart')}"
+                    th:classappend="${cartItemCount > 0 ? 'cart-link' : ''}">
                     <span>Cart</span>
                     <span th:if="${cartItemCount > 0}" class="cart-counter" th:text="${cartItemCount}">0</span>
                 </a>

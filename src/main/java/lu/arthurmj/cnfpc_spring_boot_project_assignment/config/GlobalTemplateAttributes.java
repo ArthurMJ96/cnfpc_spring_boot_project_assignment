@@ -31,12 +31,24 @@ public class GlobalTemplateAttributes {
      * Exposes a Function to Thymeleaf to check for active paths.
      * Returns "active" if the current path contains with the given path, else "".
      * 
-     * @example `<div th:class="${uc.apply('/products')}">...</div>`
+     * @example `<div th:class="${uca.apply('/products')}">...</div>`
      */
-    @ModelAttribute("uc")
+    @ModelAttribute("uca")
     public Function<String, String> urlContainsActive(HttpServletRequest request) {
         String current = request.getRequestURI();
         return path -> current != null && current.contains(path) ? "active" : "";
+    }
+
+    /**
+     * Exposes a Function to Thymeleaf to check for active paths.
+     * Returns "active" if the current path starts with the given path, else "".
+     * 
+     * @example `<div th:class="${usa.apply('/products')}">...</div>`
+     */
+    @ModelAttribute("usa")
+    public Function<String, String> urlStartsActive(HttpServletRequest request) {
+        String current = request.getRequestURI();
+        return path -> current != null && current.startsWith(path) ? "active" : "";
     }
 
     /** Exposes the cart item count to Thymeleaf templates. */

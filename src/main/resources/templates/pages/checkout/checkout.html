@@ -87,7 +87,7 @@
                         <div class="accordion-content">
                             <form th:action="@{/checkout}" method="post" th:object="${shippingAddress}">
                                 <input type="hidden" name="mode" value="new" />
-                                <div style="display: flex; justify-content: space-between;">
+                                <div style="display: flex; justify-content: space-between; gap: 1rem;">
                                     <div class="form-group">
                                         <label for="firstName">First name</label>
                                         <input type="text" th:field="*{firstName}" class="form-input" />
