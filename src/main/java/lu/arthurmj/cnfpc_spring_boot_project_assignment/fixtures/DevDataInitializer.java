@@ -135,7 +135,7 @@ public class DevDataInitializer {
 						"Blender",
 						"Powerful kitchen blender with multiple speed settings.",
 						4999, new HashSet<>(Arrays.asList(home, electronics)),
-						Arrays.asList("/images/product/Blender.jpg"), rndNumber()));
+						Arrays.asList("/images/product/blender.jpg"), rndNumber()));
 				productService.save(productFactory.createProduct(
 						"Smartwatch",
 						"Feature-rich smartwatch with health tracking capabilities.",
