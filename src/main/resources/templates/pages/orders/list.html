@@ -1,0 +1,52 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Your Orders',
+    content=~{::content}
+)}">
+
+    <main th:fragment="content">
+        <h1>Your Orders</h1>
+
+        <div th:if="${#lists.isEmpty(orders)}">
+            <p style="color: var(--text-secondary);">You have no orders yet.</p>
+            <a th:href="@{/products}" class="product-card-action-button">Browse products</a>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(orders)}" class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Total</th>
+                        <th>Items</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td th:text="${order.id}">0</td>
+                        <td th:text="${#numbers.formatCurrency(order.totalAmount/100.0)}">$0.00</td>
+                        <td th:text="${order.totalItems}">0</td>
+                        <td>
+                            <span class="badge"
+                                th:with="status=${order.orderStatus != null ? order.orderStatus.name() : 'UNKNOWN'}"
+                                th:classappend="${
+                                    status == 'PENDING' ? 'badge-neutral' :
+                                    status == 'PROCESSING' ? 'badge-info' :
+                                    status == 'SHIPPED' ? 'badge-primary' :
+                                    status == 'DELIVERED' ? 'badge-success' :
+                                    status == 'CANCELLED' ? 'badge-danger' :
+                                    'badge-neutral'
+                                }" th:text="${status}">PENDING</span>
+                        </td>
+                        <td style="text-align: right;">
+                            <a th:href="@{/orders/{id}(id=${order.id})}"
+                                style="color: var(--primary); font-weight: 500;">View Details &#8250;</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</th:block>

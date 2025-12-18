@@ -1,0 +1,157 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Checkout',
+    content=~{::content}
+)}">
+
+    <main th:fragment="content">
+        <a class="back-link" th:href="@{/cart}">Back to cart</a>
+        <h1>Checkout</h1>
+
+        <div th:if="${checkoutError}" class="error-message" th:text="${checkoutError}"></div>
+        <div th:if="${cartError}" class="error-message" th:text="${cartError}"></div>
+
+        <div class="cart-layout">
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th style="width: 9rem;">Quantity</th>
+                            <th style="width: 8rem; text-align: right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${items}">
+                            <td>
+                                <div class="list-product">
+                                    <div class="list-product-thumb" th:if="${item.imageUrl}">
+                                        <img th:src="${item.imageUrl}" th:alt="${item.productName}" loading="lazy" />
+                                    </div>
+                                    <div>
+                                        <div class="list-product-name" th:text="${item.productName}"></div>
+                                        <div class="list-product-price"
+                                            th:text="${#numbers.formatCurrency(item.price/100.0)}"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td th:text="${item.quantity}"></td>
+                            <td class="cart-line-total" style="text-align:right"
+                                th:text="${#numbers.formatCurrency(item.lineTotal/100.0)}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <aside class="cart-summary">
+                <div class="cart-summary-row">
+                    <span>Subtotal</span>
+                    <strong th:text="${#numbers.formatCurrency(totalAmount/100.0)}"></strong>
+                </div>
+                <p class="cart-summary-note">Enter an address to place your order.</p>
+
+                <div class="accordion-container">
+
+                    <div class="accordion-item">
+                        <input type="radio" name="accordion-group" id="acc-1" class="accordion-radio"
+                            th:checked="${#ctx.containsVariable('mode') ? (mode == 'saved') : (savedAddresses != null && !savedAddresses.isEmpty())}"
+                            th:disabled="${savedAddresses == null || savedAddresses.isEmpty()}">
+                        <label for="acc-1" class="accordion-header"
+                            th:title="${savedAddresses == null || savedAddresses.isEmpty() ? 'No saved addresses available' : ''}">
+                            Use a saved address
+                        </label>
+                        <div class="accordion-content">
+                            <div th:if="${savedAddresses != null && !savedAddresses.isEmpty()}">
+                                <form th:action="@{/checkout}" method="post">
+                                    <input type="hidden" name="mode" value="saved" />
+                                    <select name="addressId" class="form-input"
+                                        style="width: 100%; margin-bottom: .75rem;">
+                                        <option value="" selected>Select an address…</option>
+                                        <option th:each="addr : ${savedAddresses}" th:value="${addr.id}"
+                                            th:text="${addr.firstName + ' ' + addr.lastName + ' - ' + addr.address + ', ' + addr.city}">
+                                        </option>
+                                    </select>
+                                    <button type="submit" class="cart-primary-button" style="width:100%">
+                                        Place order
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <input type="radio" name="accordion-group" id="acc-2" class="accordion-radio"
+                            th:checked="${(savedAddresses == null || savedAddresses.isEmpty()) ? true : (mode == 'new')}">
+                        <label for="acc-2" class="accordion-header">
+                            Use a new address
+                        </label>
+                        <div class="accordion-content">
+                            <form th:action="@{/checkout}" method="post" th:object="${shippingAddress}">
+                                <input type="hidden" name="mode" value="new" />
+                                <div style="display: flex; justify-content: space-between; gap: 1rem;">
+                                    <div class="form-group">
+                                        <label for="firstName">First name</label>
+                                        <input type="text" th:field="*{firstName}" class="form-input" />
+                                        <div class="error-message" th:if="${#fields.hasErrors('firstName')}"
+                                            th:errors="*{firstName}"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="lastName">Last name</label>
+                                        <input type="text" th:field="*{lastName}" class="form-input" />
+                                        <div class="error-message" th:if="${#fields.hasErrors('lastName')}"
+                                            th:errors="*{lastName}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <input type="text" th:field="*{address}" class="form-input" />
+                                    <div class="error-message" th:if="${#fields.hasErrors('address')}"
+                                        th:errors="*{address}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" th:field="*{city}" class="form-input" />
+                                    <div class="error-message" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="region">Region</label>
+                                    <input type="text" th:field="*{region}" class="form-input" />
+                                    <div class="error-message" th:if="${#fields.hasErrors('region')}"
+                                        th:errors="*{region}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="postalCode">Postal code</label>
+                                    <input type="text" th:field="*{postalCode}" class="form-input" />
+                                    <div class="error-message" th:if="${#fields.hasErrors('postalCode')}"
+                                        th:errors="*{postalCode}"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="country">Country</label>
+                                    <input type="text" th:field="*{country}" class="form-input" />
+                                    <div class="error-message" th:if="${#fields.hasErrors('country')}"
+                                        th:errors="*{country}">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="cart-primary-button" style="width:100%">Place
+                                    order</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+        </div>
+
+    </main>
+
+</th:block>

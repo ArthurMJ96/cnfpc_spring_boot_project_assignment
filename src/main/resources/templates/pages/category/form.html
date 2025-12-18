@@ -1,0 +1,45 @@
+<th:block th:replace="~{layouts/base :: html(
+    title=category.id ? 'Edit Category' : 'Add New Category',
+    headResources=~{::headResources},
+    content=~{::content}
+)}">
+    <th:block th:fragment="headResources">
+        <link rel="stylesheet" th:href="@{/css/admin.css}">
+    </th:block>
+
+    <main th:fragment="content" style="display: flex; justify-content: center;">
+        <div class="form-card" style="max-width: 40rem;">
+            <h2 class="form-header" th:if="${category.id}">Edit Category</h2>
+            <h2 class="form-header" th:unless="${category.id}">Add New Category</h2>
+
+            <div th:if="${error}" class="error-message">
+                <p th:each="err : ${error}" th:text="${err}"></p>
+            </div>
+
+            <form th:action="@{/admin/category/save}" th:object="${category}" method="post" th:fragment="categoryForm">
+                <input type="hidden" th:field="*{id}">
+                <div class="form-group">
+                    <label for="name">Category Name</label>
+                    <input type="text" id="name" th:field="*{name}" required class="form-input"
+                        th:errorclass="form-input-error" />
+                    <p th:if="${#fields.hasErrors('name')}" class="error-msg mt-1" th:errors="*{name}">
+                        Name Error
+                    </p>
+                </div>
+
+                <button th:if="${category.id}" type="submit" class="form-button" style="margin-top: 2rem;">
+                    Update Category
+                </button>
+                <button th:unless="${category.id}" type="submit" class="form-button" style="margin-top: 2rem;">
+                    Create Category
+                </button>
+
+                <p class="form-link-text">
+                    <a th:href="@{/admin/category/list}" class="back-link">
+                        Back to Category List
+                    </a>
+                </p>
+            </form>
+        </div>
+    </main>
+</th:block>

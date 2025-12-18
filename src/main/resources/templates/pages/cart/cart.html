@@ -1,0 +1,91 @@
+<th:block th:replace="~{layouts/base :: html(
+    title=${
+        totalItems > 0 
+            ? 'Your Cart - ' + totalItems + ' Item' + (totalItems > 1 ? 's' : '') 
+            : 'Your Cart'
+        },
+    content=~{::content}
+)}">
+
+    <main th:fragment="content">
+        <a class="back-link" th:href="@{/products}">Continue shopping</a>
+        <h1>Your Cart</h1>
+
+        <div th:if="${cartSuccess}" class="success-message" th:text="${cartSuccess}"></div>
+        <div th:if="${cartError}" class="error-message" th:text="${cartError}"></div>
+
+        <div th:if="${isEmpty}">
+            <p style="color: var(--text-secondary);">Your cart is empty.</p>
+            <a th:href="@{/products}" class="product-card-action-button">Browse products</a>
+        </div>
+
+        <div th:unless="${isEmpty}" class="cart-layout">
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th style="width: 9rem;">Quantity</th>
+                            <th style="width: 8rem; text-align: right;">Total</th>
+                            <th style="width: 5rem;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${items}">
+                            <td>
+                                <div class="list-product">
+                                    <div class="list-product-thumb" th:if="${item.imageUrl}">
+                                        <img th:src="${item.imageUrl}" th:alt="${item.productName}" loading="lazy" />
+                                    </div>
+                                    <div>
+                                        <a class="list-product-name" th:href="@{'/product/' + ${item.productId}}"
+                                            th:text="${item.productName}"></a>
+                                        <div class="list-product-price"
+                                            th:text="${#numbers.formatCurrency(item.price/100.0)}"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <form class="cart-sub-form" th:action="@{/cart/update}" method="post">
+                                    <input type="hidden" name="productId" th:value="${item.productId}" />
+                                    <input class="cart-quantity-input" type="number" name="quantity" min="1" max="999"
+                                        th:value="${item.quantity}" />
+                                    <button type="submit" class="cart-inline-button">Update</button>
+                                </form>
+                            </td>
+                            <td class="cart-line-total" th:text="${#numbers.formatCurrency(item.lineTotal/100.0)}"></td>
+                            <td style="text-align: right;">
+                                <form class="cart-sub-form" th:action="@{/cart/remove}" method="post">
+                                    <input type="hidden" name="productId" th:value="${item.productId}" />
+                                    <button type="submit" class="cart-link-button">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <form th:action="@{/cart/clear}" method="post"
+                                    style="display: flex; justify-content: end;">
+                                    <button type="submit" class="cart-secondary-button" onclick="return confirm('Are you sure you want to clear you cart ?')">Clear cart</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <aside class="cart-summary animated">
+                <div class="cart-summary-row">
+                    <span>Subtotal</span>
+                    <strong th:text="${#numbers.formatCurrency(totalAmount/100.0)}"></strong>
+                </div>
+                <p class="cart-summary-note">Taxes and shipping will be calculated at checkout.</p>
+                <div class="cart-summary-actions">
+                    <a class="cart-primary-button" th:href="@{/checkout}">Checkout</a>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+</th:block>

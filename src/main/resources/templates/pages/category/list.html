@@ -1,0 +1,74 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Category List',
+    headResources=~{::headResources},
+    content=~{::content}
+)}">
+
+    <th:block th:fragment="headResources">
+        <link rel="stylesheet" th:href="@{/css/admin.css}">
+    </th:block>
+
+    <main th:fragment="content">
+        <h1>Admin Category List</h1>
+
+        <div>
+            <div style="margin-bottom: 1.5rem; text-align: right;">
+                <a th:href="@{/admin/category/new}" class="hero-button" style="padding: 0.5rem 1rem;">
+                    Add New Category
+                </a>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 4rem;">ID</th>
+                        <th style="text-align: left;">Name</th>
+                        <th style="text-align: center;">Products</th>
+                        <th style="width: 150px; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="category : ${categories}">
+                        <td th:text="${category.id}">1</td>
+
+                        <td style="text-align: left;">
+                            <a th:href="@{/category/} + ${category.name}" th:text="${category.name}"
+                                style="color: var(--primary); font-weight: 500;"></a>
+                        </td>
+
+                        <td style="text-align: center;">
+                            <span th:text="${category.products.size()}"></span>
+                        </td>
+
+                        <td>
+                            <a th:href="@{/admin/category/edit/} + ${category.id}" class="edit-button">Edit</a>
+
+                            <form th:action="@{/admin/category/delete/} + ${category.id}" method="post"
+                                style="display: inline-block;">
+                                <input type="hidden" name="_method" value="delete" />
+
+                                <button type="submit" class="delete-button" th:data-category-name="${category.name}"
+                                    onclick="return confirmDeletion(this);">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p th:if="${#lists.isEmpty(categories)}"
+                style="text-align: center; color: var(--text-secondary); padding: 2rem; border: 1px dashed var(--border-color); margin-top: 1.5rem; border-radius: 0.5rem;">
+                No categories found.
+            </p>
+        </div>
+
+        <script>
+            function confirmDeletion(buttonElement) {
+                const categoryName = buttonElement.getAttribute('data-category-name');
+                return confirm('Are you sure you want to delete the category "' + categoryName + '" ?');
+            }
+        </script>
+    </main>
+
+</th:block>

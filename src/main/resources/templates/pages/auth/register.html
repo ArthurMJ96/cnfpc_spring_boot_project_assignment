@@ -1,0 +1,41 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Register',
+    content=~{::content}
+)}">
+
+  <main th:fragment="content" style="display: flex; justify-content: center;">
+    <div class="form-card">
+      <h2 class="form-header">Create Account</h2>
+
+      <form th:action="@{/register}" th:object="${customer}" method="post">
+
+        <div th:if="${#fields.hasAnyErrors()}" class="error-message">
+          <p th:each="err : ${#fields.allErrors}" th:text="${err}"></p>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" th:field="*{email}" required class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" th:field="*{password}" required class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" th:field="*{confirmPassword}" required class="form-input">
+        </div>
+
+        <button type="submit" class="form-button">Register</button>
+      </form>
+
+      <p class="form-link-text">
+        Already have an account?
+        <a th:href="@{/login}" style="color: var(--primary); font-weight: 500;">Log in here</a>
+      </p>
+    </div>
+  </main>
+
+</th:block>

@@ -1,0 +1,30 @@
+<th:block th:replace="~{layouts/aside :: html(
+    title=${categories} ? ${categoryName} + ' Category' : 'All Categories',
+    content=~{::content},
+    sidebar=~{::sidebar}
+)}">
+
+    <aside th:if="${categories}" th:fragment="sidebar" class="sidebar">
+        <h2 class="sidebar-title">Product Categories</h2>
+        <ul>
+            <li th:each="cat : ${categories}">
+                <a th:text="${cat.name}" th:href="@{/category/{name}(name=${cat.name})}"
+                    th:classappend="${#strings.equals(categoryName, cat.name) ? 'active' : ''}" class="sidebar-link"></a>
+            </li>
+        </ul>
+    </aside>
+
+    <section th:if="${categories}" th:fragment="content">
+        <h1><b th:text="${categoryName}"></b> Products</h1>
+
+        <th:block th:replace="~{pages/product/grid :: productsGrid}" />
+    </section>
+
+    <section th:unless="${categories}" th:fragment="content" style="grid-column: 1 / span 2;">
+        <h1>No Categories Found</h1>
+        <a th:href="@{/}" class="back-link">
+            Back to Home
+        </a>
+    </section>
+
+</th:block>

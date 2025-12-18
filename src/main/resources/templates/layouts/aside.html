@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{fragments/head :: head(title=${title}, headResources=${headResources})}">
+</head>
+
+<body>
+    <!-- Navbar fragment -->
+    <div th:replace="~{fragments/navbar}"></div>
+
+    <main th:fragment="main-content-wrapper" class="two-column-layout">
+
+        <!-- Sidebar content -->
+        <aside th:replace="${sidebar}"></aside>
+
+        <!-- Main content -->
+        <section th:replace="${content}"></section>
+    </main>
+
+    <!-- Footer fragment -->
+    <div th:replace="~{fragments/footer}"></div>
+</body>
+
+</html>

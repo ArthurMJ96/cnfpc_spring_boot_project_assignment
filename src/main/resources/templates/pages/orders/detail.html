@@ -1,0 +1,88 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Order Details',
+    content=~{::content}
+)}">
+
+    <main th:fragment="content" class="profile-wrapper">
+        <div class="profile">
+            <a class="back-link" th:href="@{/orders}">Back to orders</a>
+            <h1 style="text-align: center;">Order Details</h1>
+
+            <section>
+                <h3>Summary</h3>
+
+                <div class="form-group">
+                    <label>Status</label>
+                    <div style="font-weight: 600;" th:text="${order.orderStatus}">PENDING</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Total</label>
+                    <div style="font-weight: 600;" th:text="${#numbers.formatCurrency(order.totalAmount/100.0)}">$0.00
+                    </div>
+                </div>
+            </section>
+
+            <section th:fragment="orderItems">
+                <h3>Items</h3>
+
+                <p th:if="${#lists.isEmpty(order.orderItems)}" style="color: var(--text-secondary);">No items.</p>
+
+                <div th:unless="${#lists.isEmpty(order.orderItems)}" class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th style="text-align: right;">Price</th>
+                                <th style="text-align: center;">Qty</th>
+                                <th style="text-align: right;">Line total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${order.orderItems}">
+                                <td>
+                                    <a th:href="@{/product/} + ${item.product.id}"
+                                        th:text="${item.product != null ? item.product.name : 'Product unavailable'}"></a>
+                                </td>
+
+                                <td style="text-align: right;" th:text="${#numbers.formatCurrency(item.price/100.0)}">
+                                    -
+                                </td>
+
+                                <td style="text-align: center;" th:text="${item.quantity}">1</td>
+
+                                <td style="text-align: right;"
+                                    th:text="${#numbers.formatCurrency((item.price * item.quantity)/100.0)}">
+                                    -
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section th:fragment="orderShipping">
+                <h3>Shipping Address</h3>
+
+                <ul class="address-list">
+                    <li class="address-card"
+                        th:utext="${order.shippingAddress != null ? order.shippingAddress.toString() : 'No shipping address'}">
+                        No shipping address
+                    </li>
+                </ul>
+            </section>
+
+            <section th:fragment="orderBilling">
+                <h3>Billing Address</h3>
+
+                <ul class="address-list">
+                    <li class="address-card"
+                        th:utext="${order.billingAddress != null ? order.billingAddress.toString() : 'No billing address'}">
+                        No billing address
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+</th:block>

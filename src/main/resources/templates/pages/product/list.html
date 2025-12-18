@@ -1,0 +1,91 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Product List',
+    headResources=~{::headResources},
+    content=~{::content}
+)}">
+
+    <th:block th:fragment="headResources">
+        <link rel="stylesheet" th:href="@{/css/admin.css}">
+    </th:block>
+
+    <main th:fragment="content">
+        <h1>Admin Product List</h1>
+
+        <div>
+            <div style="margin-bottom: 1.5rem; text-align: right;">
+                <a th:href="@{/admin/products/new}" class="hero-button" style="padding: 0.5rem 1rem;">
+                    Add New Product
+                </a>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th style="text-align: left;">Name</th>
+                        <th style="text-align: right;">Price</th>
+                        <th style="text-align: center;">Inventory</th>
+                        <th style="width: 150px; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="product : ${products}">
+                        <td th:text="${product.id}">1</td>
+
+                        <td style="text-align: left;">
+                            <a th:href="@{/product/} + ${product.id}" style="color: var(--primary); font-weight: 500;">
+                                <div class="list-product">
+                                    <div class="list-product-thumb" th:unless="${#lists.isEmpty(product.images)}">
+                                        <img th:src="${product.images[0]}" th:alt="${product.name}"
+                                            loading="lazy" />
+                                    </div>
+                                    <div>
+                                        <div class="list-product-name" th:href="@{'/product/' + ${product.id}}"
+                                            th:text="${product.name}"></div>
+                                        <div class="list-product-description"
+                                            th:text="${product.description}"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </td>
+
+                        <td style="text-align: right;">
+                            $<span th:text="${#numbers.formatCurrency(product.price/100.0)}"></span>
+                        </td>
+
+                        <td style="text-align: center;">
+                            <span th:text="${product.inventory != null ? product.inventory.amount : '0'}"></span>
+                        </td>
+
+                        <td class="action-buttons-cell">
+                            <a th:href="@{/admin/products/edit/} + ${product.id}" class="edit-button">Edit</a>
+
+                            <form th:action="@{/admin/products/delete/} + ${product.id}" method="post"
+                                style="display: inline-block;">
+                                <input type="hidden" name="_method" value="delete" />
+
+                                <button type="submit" class="delete-button" th:data-product-name="${product.name}"
+                                    onclick="return confirmDeletion(this);">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p th:if="${#lists.isEmpty(products)}"
+                style="text-align: center; color: var(--text-secondary); padding: 2rem; border: 1px dashed var(--border-color); margin-top: 1.5rem; border-radius: 0.5rem;">
+                No products found.
+            </p>
+        </div>
+
+        <script>
+            function confirmDeletion(buttonElement) {
+                const productName = buttonElement.getAttribute('data-product-name');
+                return confirm('Are you sure you want to delete the product "' + productName + '" ?');
+            }
+        </script>
+    </main>
+
+</th:block>

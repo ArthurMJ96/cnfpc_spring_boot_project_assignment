@@ -1,0 +1,20 @@
+<th:block th:replace="~{layouts/base :: html(
+    title=${status} + ' ' + ${error},
+    content=~{::content}
+)}">
+
+    <main th:fragment="content" style="display: flex; flex-flow: column; text-align: center;">
+        <h1>Error <span th:text="${status}"></span>: <span th:text="${error}"></span></h1>
+
+        <a th:href="@{/}" class="back-link">
+            Back to Home
+        </a>
+
+        <div sec:authorize="hasAuthority('EMPLOYEE')" style="flex-grow: 1;">
+            <textarea id="errorinfo" style="width: 100%;height:100%;"
+                th:utext="'Date:'+${timestamp}+'&#10;Path: '+${path}+'&#10;Error: '+${error}+'&#10;Status: '+${status}+'&#10;Message: '+${message}+'&#10;Exception: '+${exception}+'&#10;Trace: '+${trace}"></textarea>
+        </div>
+
+    </main>
+
+</th:block>

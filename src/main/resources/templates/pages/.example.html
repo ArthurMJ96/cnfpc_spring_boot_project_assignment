@@ -1,0 +1,18 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='Example Title',
+    headResources=~{::headResources},
+    content=~{::content}
+)}">
+    <!-- Layout usage template for quick copy & paste -->
+
+
+    <th:block th:fragment="headResources">
+        <!-- [Optional block] Add whatever the page need here (Meta tags, scripts, css, whatever) -->
+        <link rel="stylesheet" th:href="@{/css/WHATEVER.css}">
+    </th:block>
+
+    <main th:fragment="content">
+        <!-- Main content -->
+    </main>
+
+</th:block>

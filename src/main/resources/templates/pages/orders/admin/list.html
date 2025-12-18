@@ -1,0 +1,63 @@
+<th:block th:replace="~{layouts/base :: html(
+    title='All Orders',
+    headResources=~{::headResources},
+    content=~{::content}
+)}">
+
+    <th:block th:fragment="headResources">
+        <link rel="stylesheet" th:href="@{/css/admin.css}">
+    </th:block>
+
+    <main th:fragment="content">
+        <h1>All Orders</h1>
+
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">Order Date</th>
+                        <th>ID</th>
+                        <th style="text-align: left;">Customer</th>
+                        <th style="text-align: right;">Total</th>
+                        <th style="text-align: center;">Items</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td style="text-align: left;"
+                            th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}">-</td>
+                        <td th:text="${order.id}">-</td>
+                        <td style="text-align: left;" th:text="${order.customer != null ? order.customer.email : '-'}">-
+                        </td>
+                        <td style="text-align: right;" th:text="${#numbers.formatCurrency(order.totalAmount/100.0)}">
+                            $0.00</td>
+                        <td style="text-align: center;" th:text="${order.totalItems}">0</td>
+                        <td>
+                            <span class="badge"
+                                th:with="status=${order.orderStatus != null ? order.orderStatus.name() : 'UNKNOWN'}"
+                                th:classappend="${
+                                    status == 'PROCESSING' ? 'badge-info' :
+                                    status == 'SHIPPED' ? 'badge-primary' :
+                                    status == 'DELIVERED' ? 'badge-success' :
+                                    status == 'CANCELLED' ? 'badge-danger' :
+                                    ''
+                                }" th:text="${status}">PENDING</span>
+                        </td>
+                        <td style="text-align: right;">
+                            <a th:href="@{/admin/orders/{id}(id=${order.id})}"
+                                style="color: var(--primary); font-weight: 500;">View Details &#8250;</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p th:if="${#lists.isEmpty(orders)}"
+                style="text-align: center; color: var(--text-secondary); padding: 2rem; border: 1px dashed var(--border-color); margin-top: 1.5rem; border-radius: 0.5rem;">
+                No orders found.
+            </p>
+        </div>
+    </main>
+
+</th:block>

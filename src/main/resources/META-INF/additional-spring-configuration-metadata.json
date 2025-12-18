@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "app.name",
+    "type": "java.lang.String",
+    "description": "The name of the ecommerce website."
+  },
+  {
+    "name": "app.load-sample-data",
+    "type": "java.lang.String",
+    "description": "Wether to insert development sample data into the database on application startup. Inserts data only if there are no existing users."
+  }
+]}
