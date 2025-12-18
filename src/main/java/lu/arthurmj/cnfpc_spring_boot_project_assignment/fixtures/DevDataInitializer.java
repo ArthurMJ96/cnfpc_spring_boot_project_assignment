@@ -155,7 +155,7 @@ public class DevDataInitializer {
 						"Yoga Mat",
 						"Non-slip yoga mat for all types of exercises.",
 						2999, new HashSet<>(Arrays.asList(sports, home)),
-						Arrays.asList("https://placehold.net/600x600.png"), rndNumber()));
+						Arrays.asList("/images/product/yogamat.jpg"), rndNumber()));
 				// #endregion
 			}
 		};
